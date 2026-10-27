@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Фёдор для SelleHome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one calm column (max 1080px); the real partner base is the wide, loud block near the top. */
+:root{
+  --bg:#eff2f6; --surface:#ffffff; --surface-2:#e6eaf0; --ink:#121824; --muted:#5c6675; --line:#d4dae3;
+  --accent:#0d6b4f; --accent-ink:#ffffff; --accent-soft:#dcefe6;
+  --warn:#b7791f; --warn-soft:#fbeed5; --good:#1f7a3a; --good-soft:#dcf2e1; --bad:#a23b3b; --bad-soft:#f6dcdc;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(26px,4.6vw,42px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:700}
+h3{font-size:16px;font-weight:500}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+section{padding-block:40px;border-top:1px solid var(--line)}
+section>.wrap{display:grid;gap:20px}
+.lede{max-width:66ch;font-size:17px}
+
+.hero{padding-block:44px 40px;display:grid;gap:22px}
+.quote{border-left:3px solid var(--accent);padding:6px 16px;color:var(--muted);max-width:66ch;font-style:italic}
+.quote b{color:var(--ink);font-style:normal;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.col{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:10px;align-content:start}
+.col h3{color:var(--accent)}
+.col ul{margin:0;padding-left:18px;display:grid;gap:6px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+
+/* partner base */
+.proto{background:var(--surface);border:1px solid var(--line);display:grid;gap:0}
+.proto-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.proto-head .eyebrow{color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.stats div{padding:12px 10px;border-right:1px solid var(--line);display:grid;gap:2px}
+.stats div:last-child{border-right:0}
+.stats .v{font-family:var(--display);font-size:22px;font-weight:700}
+.stats .k{font-size:12px;color:var(--muted);line-height:1.2}
+@media (max-width:760px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stats div{border-bottom:1px solid var(--line)}}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;padding:12px 20px;border-bottom:1px solid var(--line);align-items:center}
+.toolbar label{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+select,input[type=text],input[type=number]{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:6px 8px;border-radius:4px;min-width:0}
+input[type=text]{flex:1 1 180px}
+.split{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.tablewrap{overflow-x:auto;min-width:0;border-right:1px solid var(--line);max-height:720px;overflow-y:auto}
+@media (max-width:900px){.tablewrap{border-right:0;border-bottom:1px solid var(--line);max-height:480px}}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{position:sticky;top:0;background:var(--surface);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;cursor:pointer;user-select:none;z-index:1}
+th.on{color:var(--accent)}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.sel{background:var(--accent-soft)}
+td.name{white-space:normal;min-width:200px;font-weight:500;line-height:1.3}
+td.name small{display:block;font-weight:400;color:var(--muted);font-family:var(--mono);font-size:11px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.pill.s3,.pill.s4,.pill.s5{background:var(--good-soft);color:var(--good)}
+.pill.s1,.pill.s2{background:var(--warn-soft);color:var(--warn)}
+.pill.s6{background:var(--bad-soft);color:var(--bad)}
+.pill.k{background:var(--accent-soft);color:var(--accent)}
+.bar{display:inline-block;width:56px;height:6px;background:var(--surface-2);vertical-align:middle;margin-right:8px;border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.panel{padding:18px 20px;display:grid;gap:14px;align-content:start;min-width:0}
+.panel h3{font-size:18px;font-weight:700}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.why{font-family:var(--mono);font-size:12.5px;line-height:1.5;color:var(--muted);background:var(--bg);padding:10px 12px;border:1px solid var(--line)}
+.posts{display:grid;gap:8px;font-size:13.5px}
+.post{border-left:2px solid var(--line);padding:2px 10px;color:var(--muted)}
+.post b{color:var(--ink);font-weight:500;font-family:var(--mono);font-size:12px}
+.post a{margin-left:6px;font-size:12px}
+.msg{white-space:pre-wrap;font-size:14.5px;background:var(--bg);border:1px solid var(--line);padding:14px;line-height:1.5;overflow-wrap:anywhere}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-size:14px;padding:8px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;border-radius:4px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:focus-visible,select:focus-visible,input:focus-visible,th:focus-visible,tr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.note{font-size:13px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line)}
+.loading{padding:40px 20px;color:var(--muted);text-align:center}
+
+/* top picks */
+.picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.picks{grid-template-columns:1fr}}
+.pick{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;gap:8px;align-content:start}
+.pick .t{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pick .t b{font-size:16px}
+.pick .t span{font-family:var(--display);color:var(--accent);font-weight:700}
+.pick p{font-size:14.5px}
+.pick .m{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* how */
+.how{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);background:var(--surface)}
+.how div{padding:16px;border-right:1px solid var(--line);display:grid;gap:6px;align-content:start}
+.how div:last-child{border-right:0}
+.how b{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.how p{font-size:14.5px}
+@media (max-width:760px){.how{grid-template-columns:1fr}.how div{border-right:0;border-bottom:1px solid var(--line)}.how div:last-child{border-bottom:0}}
+pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--surface);border:1px solid var(--line);padding:14px;overflow-x:auto}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;background:var(--surface);border:1px solid var(--line);padding:18px}
+.calc label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.calc .out{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid var(--line);padding-top:14px}
+.calc .out .v{font-family:var(--display);font-size:24px;font-weight:700;color:var(--accent)}
+.calc .out .k{font-size:13px;color:var(--muted)}
+@media (max-width:640px){.calc,.calc .out{grid-template-columns:1fr}}
+
+.steps{display:grid;border:1px solid var(--line);background:var(--surface)}
+.step{display:grid;grid-template-columns:84px 1fr;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .d{font-family:var(--display);font-weight:700;padding:16px;border-right:1px solid var(--line);color:var(--accent);font-size:14px}
+.step .t{padding:16px;display:grid;gap:4px}
+.step .t p{color:var(--muted);font-size:15px}
+
+.proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.proof{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:8px;align-content:start}
+.card .big{font-family:var(--display);font-size:28px;font-weight:700;color:var(--accent);line-height:1}
+.card .stack{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.contact code{font-family:var(--mono);font-size:15px;background:var(--surface);border:1px solid var(--line);padding:8px 12px}
+@media (prefers-reduced-motion:no-preference){tbody tr{transition:background .15s}}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <p class="eyebrow">Ответ Илье · вакансия «Менеджер по работе с блогерами» · SelleHome · 27.10.2026</p>
+  <h1>Владею ли Клодом? Да, каждый день. Вайбкодинг? Нет.</h1>
+  <p class="quote">Ваш вопрос: <b>«…владеете Клодом? Вайбкодите? Или есть опыт именно в программировании, знании архитектуры?»</b></p>
+  <p class="lede">Илья, вместо длинного сообщения показываю на деле. Ниже база из <span id="hCount">50+</span> реальных Telegram-каналов и чатов, где сидят продавцы Ozon и Wildberries: живые цифры с t.me, оценка каждого, контакт для рекламы и черновик первого сообщения с зацепкой из последнего поста. Собрано за вечер скриптом, который я написал с Claude Code. Код сборщика открыт.</p>
+  <div class="chips">
+    <span class="chip">Python</span><span class="chip">Node</span><span class="chip">SQLite</span><span class="chip">Telegram-боты</span><span class="chip">VPS · Docker</span><span class="chip">Claude Code · Codex</span><span class="chip">Google Sheets · CRM</span>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Готово к работе</p>
+    <h2>База партнёров SelleHome: реальные каналы, живые цифры</h2>
+    <p class="lede">Нажмите на строку: откроется карточка с последними постами, контактом для рекламы и черновиком первого сообщения. Сообщение собирается из данных карточки, у каждого канала своё. Статусы можно двигать: так я веду переговоры в одной таблице.</p>
+
+    <div class="proto" id="proto">
+      <div class="proto-head">
+        <p class="eyebrow">Данные с публичных страниц t.me</p>
+        <p class="muted" style="font-size:13px" id="collectedAt">собрано 27.10.2026</p>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="toolbar">
+        <label>Тип <select id="fType"><option value="">все</option><option value="channel">каналы</option><option value="chat">чаты</option></select></label>
+        <label>Статус <select id="fStatus"><option value="">все</option></select></label>
+        <label><input type="checkbox" id="fContact"> только с контактом для рекламы</label>
+        <input type="text" id="fQ" placeholder="поиск по названию, описанию, @username">
+      </div>
+      <div class="split">
+        <div class="tablewrap">
+          <table id="tbl">
+            <thead><tr>
+              <th data-k="name">Канал</th><th data-k="count">Подписчики</th><th data-k="avg">Просм. поста</th><th data-k="err">Охват, %</th><th data-k="score" class="on">Оценка</th><th data-k="st">Статус</th>
+            </tr></thead>
+            <tbody><tr><td colspan="6" class="loading">Загружаю channels.json…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="panel" id="panel"></div>
+      </div>
+      <p class="note">Оценка 0–100 = тема (до 40: про Ozon выше, чем только про WB; покупательские каналы со скидками и ПВЗ вниз) + размер (до 25, логарифм) + вовлечённость (до 15: просмотры поста к подписчикам, у чатов — доля онлайн) + активность (до 10: когда был последний пост) + контакт для рекламы в описании (до 10). Веса фиксирую до старта и меняю только по результату: кто реально привёл оплаты.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Кому писать первым</p>
+    <h2>Пять каналов, с которых я бы начал в понедельник</h2>
+    <div class="picks" id="picks"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Как это собрано</p>
+    <h2>Один вечер, 60 строк Python, никаких API-ключей</h2>
+    <div class="how">
+      <div><b>1. Источники</b><p>Пять публичных подборок (se11er.ru, telegid, partnerkin, tele-finder, sellermap) → 56 адресов. Каналы про находки, скидки и ПВЗ отсеял вручную: там покупатели, а не продавцы.</p></div>
+      <div><b>2. Сбор</b><p>На каждый адрес две публичные страницы t.me: карточка (точное число подписчиков, описание) и лента (последние 20 постов с датами и просмотрами). 1 запрос в секунду, браузерный User-Agent, стоп после трёх ошибок.</p></div>
+      <div><b>3. Метрики</b><p>Средние просмотры поста, охват в % от подписчиков, постов в неделю, дата последнего поста, контакт для рекламы из описания. Всё считается из сырых данных, ничего не вписано руками.</p></div>
+      <div><b>4. Дальше</b><p>Те же 60 строк переносятся на менеджеров магазинов и агентства: чаты селлеров, 2ГИС, Яндекс. Я так уже собрал 229 компаний одной ниши и каждой написал своё сообщение.</p></div>
+    </div>
+    <pre>python tools/collect_tg.py tools/channels.txt sellehome/channels.json
+[1/56] namarketplacewithleo: channel 87604 avg_views=4969
+[2/56] vsedlyamp: channel 55784 avg_views=2931
+…
+[32/56] mpgo_ru: channel 80715 avg_views=10471
+…
+[56/56] wildberries_marketplace_chat: chat 9161
+записано 56 → sellehome/channels.json</pre>
+    <p>Код и данные: <a href="https://github.com/dobrewoks1/dobrewoks1.github.io/blob/main/tools/collect_tg.py" target="_blank" rel="noopener">tools/collect_tg.py</a> · <a href="channels.json" target="_blank" rel="noopener">channels.json</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Как это устроено</p>
+    <h2>Я проектирую, Claude печатает, тесты проверяют</h2>
+    <div class="cols">
+      <div class="col">
+        <h3>Делаю сам</h3>
+        <ul>
+          <li>Разбираю задачу и пишу ТЗ. Для этой страницы: что собрать, как оценить, что показать.</li>
+          <li>Решаю структуру: где данные, где логика, где интерфейс.</li>
+          <li>Читаю весь код, который получился, и правлю руками.</li>
+          <li>Разворачиваю на VPS: Linux, Docker, задачи по расписанию.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Делает Claude Code</h3>
+        <ul>
+          <li>Печатает код по моему плану, файл за файлом.</li>
+          <li>Пишет автотесты и гоняет их, пока не зелёные.</li>
+          <li>Ищет ошибку по логам быстрее, чем я глазами.</li>
+          <li>Черновики писем и отчётов, которые я потом переписываю.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Где граница</h3>
+        <ul>
+          <li>Профильного образования в программировании нет: три года проектной работы.</li>
+          <li>Высоконагруженные системы не проектировал.</li>
+          <li>С блогерами и партнёрками не работал. Зато рекламу в Telegram запускаю с 2023 года и продаю свои услуги перепиской.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Аргумент для партнёра</p>
+    <h2>Сколько заработает менеджер, который ведёт 12 магазинов</h2>
+    <p class="lede">Переговоры идут легче, когда партнёр видит свои деньги, а не проценты. Подставьте вашу цену подписки.</p>
+    <div class="calc">
+      <label>Цена подписки, ₽ в месяц <input type="number" id="cPrice" value="3990" min="0" step="10"></label>
+      <label>Клиентов приведёт за квартал <input type="number" id="cClients" value="8" min="0" step="1"></label>
+      <label>Средняя жизнь подписки, месяцев <input type="number" id="cLife" value="6" min="1" step="1"></label>
+      <div class="out">
+        <div><div class="v num" id="oPartner">0 ₽</div><div class="k">партнёру за эти оплаты (30 % с каждой, включая продления)</div></div>
+        <div><div class="v num" id="oClient">0 ₽</div><div class="k">платит клиент в месяц со скидкой 10 %</div></div>
+        <div><div class="v num" id="oCompany">0 ₽</div><div class="k">выручка SelleHome с этой группы клиентов после выплат партнёру</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">План</p>
+    <h2>Первые 30 дней в SelleHome</h2>
+    <div class="steps">
+      <div class="step"><div class="d">Дни 1–5</div><div class="t"><b>База до 300 контактов</b><p>Каналы (уже есть), чаты селлеров, YouTube, менеджеры магазинов и агентства сопровождения. Без дублей, с охватом, темой и контактом. Согласую с вами веса оценки.</p></div></div>
+      <div class="step"><div class="d">Дни 6–10</div><div class="t"><b>Первые 50 сообщений</b><p>Каждому своё, с привязкой к его постам, как в карточках выше. 10–15 в день, ответы в тот же час. Не сотни одинаковых.</p></div></div>
+      <div class="step"><div class="d">Дни 11–20</div><div class="t"><b>Переговоры и первые интеграции</b><p>Условия, партнёрские ссылки, материалы для партнёров: короткая презентация, посты, скриншоты. Контроль выхода, договорённости в базе.</p></div></div>
+      <div class="step"><div class="d">Дни 21–30</div><div class="t"><b>Деньги и отчёт</b><p>Переходы, регистрации, оплаты по каждому партнёру. Отчёт одной страницей в пятницу: кто привёл клиентов, что отключаем, куда добавляем бюджет.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Чем подтверждаю</p>
+    <h2>Что уже сделано в связке с ИИ</h2>
+    <div class="proof">
+      <div class="card"><div class="big">93 машины</div><h3>TO-Uchet: учёт техники и ТО для дочерней компании РЖД</h3><p class="muted">Считает остаток до ТО, подсвечивает просрочку, заказ-наряды, импорт и экспорт Excel. Один exe, работает офлайн. Механики пользуются каждый день, были итерации по их замечаниям.</p><p class="stack">Python · SQLite · JS · 286 автотестов</p></div>
+      <div class="card"><div class="big">229 компаний</div><h3>Сбор и оценка ниши для холодного выхода</h3><p class="muted">Сборщик компаний по нишам через API 2ГИС: лимиты, повторы запросов, дедупликация, выгрузка в CSV и SQLite. Дальше оценка каждой по рубрике и персональное первое сообщение.</p><p class="stack">Node · SQLite · Python</p></div>
+      <div class="card"><div class="big">4 формата</div><h3>MarkForge: конвертер документов</h3><p class="muted">Markdown, DOCX, EPUB, HTML, PDF. Три интерфейса над одним ядром: окно, командная строка, HTTP-API.</p><p class="stack">Python · FastAPI · 15 тестов</p></div>
+      <div class="card"><div class="big">с 2023</div><h3>Боты, реклама в Telegram, своя CRM</h3><p class="muted">Telegram-боты для заказчиков, настройка рекламы в Telegram и обучение этому других, CRM на Python и веб для своих продаж. Деплой на VPS.</p><p class="stack">Python · aiogram · Linux · Docker</p></div>
+    </div>
+    <p>Код: <a href="https://github.com/dobrewoks1" target="_blank" rel="noopener">github.com/dobrewoks1</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Контакт</p>
+    <h2>Фёдор Поплавский, Омск, на связи весь день по МСК</h2>
+    <div class="contact">
+      <code id="tg">@Feodor_Russkiy</code>
+      <button id="copyTg">Скопировать Telegram</button>
+      <a href="https://t.me/Feodor_Russkiy" target="_blank" rel="noopener">Открыть в Telegram</a>
+      <span class="muted" id="copied" hidden>Скопировано</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var ST=["новый","написал","ответил","договорились","вышло","приводит оплаты","отказ"];
+  // Зацепки, которые я написал руками после чтения последних постов (27.10.2026). Для остальных зацепка строится из последнего поста автоматически.
+  var HOOKS={
+    mpgo_ru:"вы каждый день публикуете новости для поставщиков, а в закрытом чате MPGO+ у вас селлеры с оборотом от миллиона, как раз те, кому нужен расчёт чистой прибыли по магазину, а не по ощущениям",
+    seo_for_wb:"ваш пост от 25.10 про то, что Ozon снова ухудшает условия и реклама дорожает, ровно про ту боль, которую SelleHome показывает в цифрах: сколько реально остаётся после комиссий, удержаний и рекламы",
+    novak_wb:"ваш пост от 26.10 про китайские копии карточек на Ozon и блок «Есть дешевле»: когда рядом демпингуют, селлеру нужно видеть свою реальную маржу, чтобы понимать, до какой цены он может опускаться",
+    andrey_pro_business:"ваш пост от 26.10 про новогодний спрос, 15–50 тысяч запросов в сутки на ВБ и Озоне: сезон, в котором поставки и остатки надо считать заранее, а не по факту",
+    msk_966:"ваш пост от 24.10 «WB даёт кредит на товар, брать перед сезоном?» и дайджест про деньги и налоги: ответ на «брать ли» упирается в чистую прибыль магазина, которую большинство считает в таблице раз в месяц",
+    marketplace_hogwarts:"ваш пост от 26.10 про жакет, который принёс 700 тысяч чистыми за сезон: ваши читатели считают именно чистую прибыль, и им есть что показать",
+    kudahiko:"вы оперативно пишете про Ozon, 24.10 про логистический комплекс в Омске (я сам из Омска, видел дым из окна)",
+    wbsharks:"вы сейчас в Иу на встречах с поставщиками: закупка партии как раз тот момент, когда селлеру нужно знать реальную маржу по Ozon до того, как он отправит деньги в Китай",
+    sellermp:"ваш вопрос подписчикам 26.10 «каким бы вы хотели видеть маркетплейс»: в комментариях наверняка всплыли комиссии и непрозрачные удержания, то есть то, что SelleHome раскладывает по полочкам"
+  };
+  var D=[],sortK="score",sortDir=-1,sel=null;
+  var fType=document.getElementById("fType"),fStatus=document.getElementById("fStatus"),fQ=document.getElementById("fQ"),fContact=document.getElementById("fContact");
+  ST.forEach(function(s,i){var o=document.createElement("option");o.value=i;o.textContent=s;fStatus.appendChild(o);});
+  function fmt(n){return n==null?"—":n.toLocaleString("ru-RU");}
+  function dateRu(iso){if(!iso)return "—";var d=new Date(iso);return d.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"});}
+  function daysAgo(iso){if(!iso)return 999;return (Date.now()-new Date(iso).getTime())/864e5;}
+  function adContact(desc){
+    var d=desc||"";
+    var m=d.match(/(?:реклам|сотруднич|по вопросам|связ|менеджер|ассистент|admin|админ|pr)[^@]{0,60}@([A-Za-z0-9_]{4,32})/i)||d.match(/@([A-Za-z0-9_]{4,32})/);
+    if(m)return "@"+m[1];
+    var e=d.match(/[\w.+-]+@[\w-]+\.[\w.]+/);
+    return e?e[0]:null;
+  }
+  function score(x){
+    var txt=((x.title||"")+" "+(x.description||"")).toLowerCase();
+    var ptxt=(x.posts||[]).map(function(p){return p.text||"";}).join(" ").toLowerCase();
+    var oz=/ozon|озон/.test(txt),wb=/wildberries|вайлдберри|валберис|\bwb\b|вб/.test(txt),mp=/маркетплейс|marketplace|селлер|поставщик/.test(txt);
+    var fit=oz&&wb?36:oz?40:mp?30:wb?20:15;
+    if(/находк|скидк|промокод|раздач|кэшбэк|кешбэк|выкуп/.test(txt))fit-=15;
+    if(/пвз|пункт выдачи/.test(txt))fit-=15;
+    if(/слив|наша цена|складчин/.test(txt+" "+ptxt))fit-=20;  /* перепродажа чужих курсов: репутационный риск */
+    if(/вакансии и резюме|подать объявление/.test(txt))fit-=10;  /* доска объявлений, а не аудитория */
+    fit=Math.max(0,fit);
+    x.dead=x.kind==="channel"&&daysAgo(x.last_post)>180;
+    var c=x.count||0;
+    var reach=Math.max(0,Math.min(25,Math.round(Math.log10(Math.max(c,100))*8-14)));
+    var eng,act;
+    if(x.kind==="chat"){
+      var r=c?(x.online||0)/c*100:0;
+      eng=r>=10?12:r>=5?8:r>=2?5:2;
+      act=(x.online||0)>500?10:(x.online||0)>100?6:2;
+    }else{
+      var e=x.err;
+      eng=e==null?5:e>60?3:e>=15?15:e>=8?11:e>=4?7:e>=1?3:1;  /* >60 %: просмотры не бьются с подписчиками, не верю */
+      var da=daysAgo(x.last_post);
+      act=da<=3?10:da<=7?7:da<=30?3:0;
+      if(x.dead)eng=0;
+    }
+    var contact=x.contact?10:2;
+    return {fit:fit,reach:reach,eng:eng,act:act,contact:contact,total:Math.max(0,Math.min(100,fit+reach+eng+act+contact))};
+  }
+  function hookFor(x){
+    if(HOOKS[x.username])return HOOKS[x.username];
+    var p=(x.posts||[]).filter(function(p){return p.text;}).slice(-1)[0];
+    if(p){var t=p.text.replace(/\s+/g," ").slice(0,90);return "увидел ваш пост от "+dateRu(p.date)+": «"+t+(p.text.length>90?"…":"")+"»";}
+    return "слежу за вашими публикациями для продавцов";
+  }
+  function msg(x){
+    var name=(x.title||x.username).replace(/\s*\|.*$/,"");
+    var to=x.contact?"Здравствуйте! Пишу по контакту для рекламы из описания канала «"+name+"». ":"Здравствуйте! ";
+    var tail="\n\nМогу прислать доступ, чтобы посмотреть сервис до разговора. Фёдор, SelleHome";
+    if(x.kind==="chat")return to+"В чате "+fmt(x.count)+" участников, и судя по вопросам, людям каждый день нужно считать прибыль, удержания и поставки. Мы делаем SelleHome: сервис для продавцов Ozon, который считает чистую прибыль с учётом комиссий и удержаний, собирает поставки, следит за СПП и рекламой.\n\nПредлагаю формат под правила чата: согласованный пост или закреп с партнёрской ссылкой, участникам скидка 10 %, вам 30 % с каждой их оплаты, включая продления, плюс оплата размещения по вашему прайсу."+tail;
+    return to+"Читаю «"+name+"»: "+hookFor(x)+". Мы делаем SelleHome, сервис для продавцов Ozon: чистая прибыль с учётом комиссий и удержаний, расчёт поставок, контроль СПП и рекламы, встроенный AI-помощник по базе знаний Ozon.\n\nХочу обсудить пост или обзор: подписчикам скидка 10 % по вашей ссылке, вам 30 % с каждой их оплаты, включая продления, и оплата размещения по вашему прайсу. Хочу, чтобы пост был по делу, а не по пресс-релизу, поэтому сначала покажу сервис."+tail;
+  }
+  function val(x,k){return k==="name"?(x.title||""):k==="count"?(x.count||0):k==="avg"?(x.avg_views||0):k==="err"?(x.err||0):k==="score"?x.s.total:x.st;}
+  function rows(){
+    var q=fQ.value.trim().toLowerCase();
+    return D.filter(function(x){
+      return (!fType.value||x.kind===fType.value)&&(fStatus.value===""||String(x.st)===fStatus.value)&&(!fContact.checked||x.contact)&&(!q||((x.title||"")+" "+(x.description||"")+" @"+x.username).toLowerCase().indexOf(q)>=0);
+    }).sort(function(a,b){var A=val(a,sortK),B=val(b,sortK);return (A<B?-1:A>B?1:0)*sortDir;});
+  }
+  function renderStats(){
+    var ch=D.filter(function(x){return x.kind==="channel";}),chats=D.filter(function(x){return x.kind==="chat";});
+    var sum=D.reduce(function(a,x){return a+(x.count||0);},0);
+    var withC=D.filter(function(x){return x.contact;}).length;
+    var fresh=ch.filter(function(x){return daysAgo(x.last_post)<=7;}).length;
+    var top=D.filter(function(x){return x.s.total>=70;}).length;
+    var inWork=D.filter(function(x){return x.st>0&&x.st<6;}).length;
+    var items=[["каналов",ch.length],["чатов",chats.length],["подписчиков суммарно",fmt(sum)],["с контактом для рекламы",withC],["постили за 7 дней",fresh],["в работе",inWork]];
+    document.getElementById("stats").innerHTML=items.map(function(p){return "<div><span class='v num'>"+p[1]+"</span><span class='k'>"+p[0]+"</span></div>";}).join("");
+    document.getElementById("hCount").textContent=D.length;
+  }
+  function renderTable(){
+    var tb=document.querySelector("#tbl tbody");
+    tb.innerHTML=rows().map(function(x){
+      return "<tr data-u='"+x.username+"' class='"+(x.username===sel?"sel":"")+"' tabindex='0'><td class='name'>"+(x.title||x.username)+" <span class='pill k'>"+(x.kind==="chat"?"чат":"канал")+"</span><small>@"+x.username+"</small></td><td class='num'>"+fmt(x.count)+"</td><td class='num'>"+(x.kind==="chat"?(x.online?fmt(x.online)+" онлайн":"—"):fmt(x.avg_views))+"</td><td class='num'>"+(x.err!=null?x.err:"—")+"</td><td class='num'><span class='bar'><i style='width:"+x.s.total+"%'></i></span>"+x.s.total+"</td><td><span class='pill s"+x.st+"'>"+ST[x.st]+"</span></td></tr>";
+    }).join("")||"<tr><td colspan='6' class='muted'>Ничего не найдено</td></tr>";
+    document.querySelectorAll("#tbl th").forEach(function(th){th.classList.toggle("on",th.dataset.k===sortK);});
+  }
+  function renderPanel(){
+    var x=D.find(function(x){return x.username===sel;});if(!x)return;
+    var s=x.s;
+    var next=x.st<5&&x.st!==6?"<button class='primary' id='bNext'>Следующий шаг: "+ST[x.st+1]+"</button>":"";
+    var rej=x.st!==6?"<button id='bRej'>Отказ</button>":"<button id='bBack'>Вернуть в работу</button>";
+    var posts=(x.posts||[]).slice(-3).reverse().map(function(p){return "<div class='post'><b>"+dateRu(p.date)+"</b>"+(p.views?" <b>"+fmt(p.views)+" просм.</b>":"")+(p.url?"<a href='"+p.url+"' target='_blank' rel='noopener'>открыть</a>":"")+"<br>"+(p.text?p.text.replace(/\s+/g," ").slice(0,140)+(p.text.length>140?"…":""):"<i>без текста (медиа)</i>")+"</div>";}).join("");
+    document.getElementById("panel").innerHTML=
+      "<h3>"+(x.title||x.username)+"</h3>"+
+      "<dl class='kv'><dt>Адрес</dt><dd><a href='"+x.url+"' target='_blank' rel='noopener'>t.me/"+x.username+"</a></dd>"+
+      "<dt>Размер</dt><dd class='num'>"+fmt(x.count)+(x.kind==="chat"?" участников"+(x.online?", "+fmt(x.online)+" онлайн":""):" подписчиков")+"</dd>"+
+      (x.kind==="channel"?"<dt>Лента</dt><dd class='num'>"+(x.avg_views?fmt(x.avg_views)+" просм. на пост, охват "+x.err+" %":"просмотры недоступны")+(x.posts_per_week?", "+x.posts_per_week+" постов в неделю":"")+", последний "+dateRu(x.last_post)+"</dd>":"")+
+      "<dt>Реклама</dt><dd>"+(x.contact?(x.contact.charAt(0)==="@"?"<a href='https://t.me/"+x.contact.slice(1)+"' target='_blank' rel='noopener'>"+x.contact+"</a>":x.contact)+" (из описания)":"контакт в описании не указан, писать через чат канала")+"</dd>"+
+      (x.dead?"<dt>Внимание</dt><dd style='color:var(--bad)'>лента не обновлялась с "+dateRu(x.last_post)+", канал заброшен</dd>":"")+
+      "<dt>Описание</dt><dd class='muted'>"+(x.description||"—").replace(/\n+/g," · ").slice(0,220)+"</dd></dl>"+
+      "<div class='why'>оценка "+s.total+" = тема "+s.fit+" + размер "+s.reach+" + вовлечённость "+s.eng+" + активность "+s.act+" + контакт "+s.contact+"</div>"+
+      (posts?"<div><p class='eyebrow' style='margin-bottom:6px'>Последние посты</p><div class='posts'>"+posts+"</div></div>":"")+
+      "<div><p class='eyebrow' style='margin-bottom:6px'>Первое сообщение, черновик</p><div class='msg'>"+msg(x)+"</div></div>"+
+      "<div class='btns'>"+next+rej+"</div>";
+    var b=document.getElementById("bNext");if(b)b.onclick=function(){x.st++;renderAll();};
+    b=document.getElementById("bRej");if(b)b.onclick=function(){x.st=6;renderAll();};
+    b=document.getElementById("bBack");if(b)b.onclick=function(){x.st=1;renderAll();};
+  }
+  function renderPicks(){
+    var top=D.filter(function(x){return x.kind==="channel"&&!x.dead;}).sort(function(a,b){return b.s.total-a.s.total;}).slice(0,5);
+    document.getElementById("picks").innerHTML=top.map(function(x){
+      return "<div class='pick'><div class='t'><b>"+(x.title||x.username)+"</b><span class='num'>"+x.s.total+"</span></div><p class='m'>"+fmt(x.count)+" подп. · "+(x.avg_views?fmt(x.avg_views)+" просм. · охват "+x.err+" %":"")+(x.contact?" · реклама "+x.contact:"")+"</p><p>Зацепка: "+hookFor(x)+".</p><p class='muted' style='font-size:13px'>Почему: "+(x.s.fit>=36?"аудитория именно про Ozon":"аудитория про маркетплейсы в целом")+(x.s.eng>=11?", посты читают (охват выше среднего)":"")+(x.s.contact===10?", есть кому писать":", контакт искать через чат")+".</p></div>";
+    }).join("");
+  }
+  function renderAll(){renderStats();renderTable();renderPanel();renderPicks();}
+  document.querySelector("#tbl tbody").addEventListener("click",function(e){var tr=e.target.closest("tr[data-u]");if(!tr)return;sel=tr.dataset.u;renderTable();renderPanel();});
+  document.querySelector("#tbl tbody").addEventListener("keydown",function(e){if(e.key!=="Enter")return;var tr=e.target.closest("tr[data-u]");if(!tr)return;sel=tr.dataset.u;renderTable();renderPanel();});
+  document.querySelectorAll("#tbl th").forEach(function(th){th.tabIndex=0;function go(){var k=th.dataset.k;if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=k==="name"?1:-1;}renderTable();}th.onclick=go;th.onkeydown=function(e){if(e.key==="Enter")go();};});
+  [fType,fStatus,fQ,fContact].forEach(function(el){el.addEventListener("input",renderTable);});
+
+  function load(data){
+    D=(data.items||[]).filter(function(x){return !x.error&&x.count;});
+    D.forEach(function(x){x.contact=adContact(x.description);x.st=0;x.s=score(x);});
+    var at=data.collected_at?new Date(data.collected_at):null;
+    if(at)document.getElementById("collectedAt").textContent="собрано "+at.toLocaleDateString("ru-RU")+" в "+at.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})+" МСК";
+    sel=D.slice().sort(function(a,b){return b.s.total-a.s.total;})[0].username;
+    renderAll();
+  }
+  if(window.CHANNELS)load(window.CHANNELS);
+  else fetch("channels.json").then(function(r){return r.json();}).then(load).catch(function(){document.querySelector("#tbl tbody").innerHTML="<tr><td colspan='6' class='loading'>Не удалось загрузить channels.json</td></tr>";});
+
+  var cP=document.getElementById("cPrice"),cC=document.getElementById("cClients"),cL=document.getElementById("cLife");
+  function calc(){
+    var p=+cP.value||0,c=+cC.value||0,l=+cL.value||0;
+    var client=Math.round(p*0.9),gross=client*c*l,partner=Math.round(gross*0.3);
+    document.getElementById("oPartner").textContent=fmt(partner)+" ₽";
+    document.getElementById("oClient").textContent=fmt(client)+" ₽";
+    document.getElementById("oCompany").textContent=fmt(gross-partner)+" ₽";
+  }
+  [cP,cC,cL].forEach(function(el){el.addEventListener("input",calc);});calc();
+
+  document.getElementById("copyTg").onclick=function(){
+    var el=document.getElementById("tg"),ok=document.getElementById("copied");
+    function selectIt(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);}
+    function done(){ok.hidden=false;setTimeout(function(){ok.hidden=true;},1500);}
+    try{navigator.clipboard.writeText(el.textContent).then(done,selectIt);}catch(e){selectIt();}
+  };
+})();
+</script>
+</body>
+</html>
