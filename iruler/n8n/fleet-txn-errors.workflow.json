@@ -1,0 +1,93 @@
+{
+  "id": "iRulerFleetErr01",
+  "name": "Ошибки: сверка транзакций",
+  "nodes": [
+    {
+      "id": "n01-17",
+      "name": "Ошибка в сценарии",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "n02-14",
+      "name": "Журнал: ошибка",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH u AS (\n  UPDATE etl_runs SET status = 'error', finished_at = now(), error = $3 || ': ' || $4\n  WHERE run_id = $1 AND status = 'running'\n  RETURNING for_date\n)\nSELECT $1 AS run_id, $2 AS workflow, $3 AS node, $4 AS error, $5 AS url,\n       (SELECT for_date::text FROM u) AS for_date",
+        "options": {
+          "queryReplacement": "={{ [ String($json.execution.id ?? ''), $json.workflow.name, $json.execution.lastNodeExecuted || '?', $json.execution.error.message, $json.execution.url || '' ] }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "pgIRuler00000001",
+          "name": "Postgres (iRuler)"
+        }
+      }
+    },
+    {
+      "id": "n03-16",
+      "name": "Алерт в Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "chatId": "={{ $env.ALERT_CHAT_ID }}",
+        "text": "={{ '🔴 ' + $json.workflow + '\\nУзел: ' + $json.node + '\\n' + $json.error\n  + '\\nДата: ' + ($json.for_date || '—')\n  + '\\nПерезапуск: GET /webhook/fleet-txn-rerun?date=' + ($json.for_date || 'ГГГГ-ММ-ДД')\n  + '\\n' + $json.url }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "tgIRuler00000001",
+          "name": "Telegram-бот отчётов"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Ошибка в сценарии": {
+      "main": [
+        [
+          {
+            "node": "Журнал: ошибка",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Журнал: ошибка": {
+      "main": [
+        [
+          {
+            "node": "Алерт в Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Moscow"
+  },
+  "pinData": {}
+}

@@ -1,0 +1,433 @@
+{
+  "id": "iRulerFleetTxn01",
+  "name": "Сверка транзакций парка (Fleet API → PostgreSQL → отчёт)",
+  "nodes": [
+    {
+      "id": "n01-21",
+      "name": "Каждый день 06:00 МСК",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        160
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "n02-18",
+      "name": "Перезапуск за дату",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        360
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "fleet-txn-rerun",
+        "responseMode": "lastNode",
+        "authentication": "none",
+        "options": {}
+      },
+      "webhookId": "5b0e7a52-iruler-rerun"
+    },
+    {
+      "id": "n03-9",
+      "name": "Параметры",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        260
+      ],
+      "parameters": {
+        "jsCode": "// Дата: из ?date=ГГГГ-ММ-ДД при ручном перезапуске, иначе вчера по Москве.\nconst q = $json.query || {};\nconst forDate = q.date || $now.setZone('Europe/Moscow').minus({ days: 1 }).toFormat('yyyy-MM-dd');\nif (!/^\\d{4}-\\d{2}-\\d{2}$/.test(forDate) || !DateTime.fromISO(forDate).isValid) {\n  throw new Error(`Неверная дата «${forDate}», нужен формат 2026-10-26`);\n}\nif (forDate >= $now.setZone('Europe/Moscow').toFormat('yyyy-MM-dd')) {\n  throw new Error(`День ${forDate} ещё не закончился — грузим только закрытые дни`);\n}\nconst parkId = $env.FLEET_PARK_ID || 'test-park';\nconst from = forDate + 'T00:00:00+03:00';\nconst to = DateTime.fromISO(forDate).plus({ days: 1 }).toFormat('yyyy-MM-dd') + 'T00:00:00+03:00';\nreturn [{ json: {\n  run_id: String($execution.id),\n  for_date: forDate,\n  park_id: parkId,\n  client_id: $env.FLEET_CLIENT_ID || 'taxi/park/' + parkId,\n  body: { query: { park: { id: parkId, transaction: { event_at: { from, to } } } }, limit: 100 },\n} }];"
+      }
+    },
+    {
+      "id": "n04-13",
+      "name": "Журнал: старт",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        460,
+        260
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO etl_runs (run_id, for_date, status) VALUES ($1, $2::date, 'running')\nON CONFLICT (run_id) DO UPDATE SET status = 'running', started_at = now()\nRETURNING run_id, for_date::text AS for_date, $3::text AS park_id, $4::text AS client_id, $5::jsonb AS body",
+        "options": {
+          "queryReplacement": "={{ [ $json.run_id, $json.for_date, $json.park_id, $json.client_id, JSON.stringify($json.body) ] }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "pgIRuler00000001",
+          "name": "Postgres (iRuler)"
+        }
+      }
+    },
+    {
+      "id": "n05-21",
+      "name": "Fleet API: транзакции",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        260
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://fleet-api.taxi.yandex.net/v2/parks/transactions/list",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Client-ID",
+              "value": "={{ $json.client_id }}"
+            },
+            {
+              "name": "X-Park-ID",
+              "value": "={{ $json.park_id }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 30000,
+          "pagination": {
+            "pagination": {
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "type": "body",
+                    "name": "cursor",
+                    "value": "={{ $response.body.cursor }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.statusCode < 300 && !$response.body.cursor }}",
+              "limitPagesFetched": true,
+              "maxRequests": 500,
+              "requestInterval": 300
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "flIRuler00000001",
+          "name": "Fleet API: X-API-Key"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "n06-23",
+      "name": "Нормализация и проверка",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        260
+      ],
+      "parameters": {
+        "jsCode": "// Все страницы ответа → одна пачка строк. Плохие строки откладываем с причиной, а не роняем запуск.\nconst p = $('Журнал: старт').first().json;\nconst rows = [];\nconst rejected = [];\nfor (const page of $input.all()) {\n  if (!Array.isArray(page.json.transactions)) {\n    throw new Error('Fleet API: ответ без transactions — ' + JSON.stringify(page.json).slice(0, 200));\n  }\n  for (const t of page.json.transactions) {\n    const amount = Number(t.amount);\n    let reason = null;\n    if (!t.id) reason = 'нет id';\n    else if (!t.driver_profile_id) reason = 'нет водителя';\n    else if (!Number.isFinite(amount)) reason = `сумма «${t.amount}» не число`;\n    if (reason) rejected.push({ txn_id: t.id ?? null, reason, raw: t });\n    else rows.push({ txn_id: t.id, driver_id: t.driver_profile_id, event_at: t.event_at,\n                     category: t.category_id, amount });\n  }\n}\n// Повтор страницы при сбое пагинации даёт дубли — оставляем по одному на id.\nconst uniq = [...new Map(rows.map((r) => [r.txn_id, r])).values()];\nif (!uniq.length && !rejected.length) {\n  throw new Error(`Fleet API вернул 0 транзакций за ${p.for_date}: проверьте ключ и парк. База не тронута.`);\n}\nreturn [{ json: { run_id: p.run_id, for_date: p.for_date, fetched: rows.length + rejected.length, dupes: rows.length - uniq.length,\n                  rows: JSON.stringify(uniq), rejected_rows: JSON.stringify(rejected) } }];"
+      }
+    },
+    {
+      "id": "n07-19",
+      "name": "Запись в PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1120,
+        260
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH x AS (\n  SELECT * FROM jsonb_to_recordset($1::jsonb)\n    AS t(txn_id text, driver_id text, event_at timestamptz, category text, amount numeric)\n), up AS (\n  INSERT INTO fleet_txn (txn_id, driver_id, event_at, category, amount, for_date)\n  SELECT txn_id, driver_id, event_at, category, amount, $2::date FROM x\n  ON CONFLICT (txn_id) DO UPDATE\n    SET amount = EXCLUDED.amount, category = EXCLUDED.category, loaded_at = now()\n    WHERE fleet_txn.amount IS DISTINCT FROM EXCLUDED.amount\n       OR fleet_txn.category IS DISTINCT FROM EXCLUDED.category\n  RETURNING (xmax = 0) AS inserted\n), rej AS (\n  INSERT INTO fleet_txn_rejected (run_id, for_date, txn_id, reason, raw)\n  SELECT $3, $2::date, r->>'txn_id', r->>'reason', r->'raw'\n  FROM jsonb_array_elements($4::jsonb) r\n  RETURNING 1\n)\nSELECT $3::text AS run_id, $2::text AS for_date, $5::int AS fetched, $6::int AS valid,\n       count(*) FILTER (WHERE inserted)     AS inserted,\n       count(*) FILTER (WHERE NOT inserted) AS updated,\n       (SELECT count(*) FROM rej)           AS rejected\nFROM up;",
+        "options": {
+          "queryReplacement": "={{ [ $json.rows, $json.for_date, $json.run_id, $json.rejected_rows, $json.fetched, JSON.parse($json.rows).length ] }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "pgIRuler00000001",
+          "name": "Postgres (iRuler)"
+        }
+      }
+    },
+    {
+      "id": "n08-14",
+      "name": "Журнал: готово",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1340,
+        260
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE etl_runs SET status = 'ok', finished_at = now(),\n  fetched = $2, inserted = $3, updated = $4, rejected = $5\nWHERE run_id = $1\nRETURNING run_id, for_date::text AS for_date",
+        "options": {
+          "queryReplacement": "={{ [ $json.run_id, $json.fetched, $json.inserted, $json.updated, $json.rejected ] }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "pgIRuler00000001",
+          "name": "Postgres (iRuler)"
+        }
+      }
+    },
+    {
+      "id": "n09-22",
+      "name": "Итоги дня по водителям",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1560,
+        260
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT driver_id, count(*) AS txns, sum(amount) AS total\nFROM fleet_txn WHERE for_date = $1::date\nGROUP BY driver_id ORDER BY total DESC",
+        "options": {
+          "queryReplacement": "={{ [ $json.for_date ] }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "pgIRuler00000001",
+          "name": "Postgres (iRuler)"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "n10-5",
+      "name": "Отчёт",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        260
+      ],
+      "parameters": {
+        "jsCode": "const u = $('Запись в PostgreSQL').first().json;\nconst p = u;\nconst d = $input.all().map((i) => i.json);\nconst total = d.reduce((s, r) => s + Number(r.total), 0);\nconst unchanged = Number(u.valid) - Number(u.inserted) - Number(u.updated);\nconst fmt = (n) => Number(n).toLocaleString('ru-RU', { maximumFractionDigits: 2 });\nconst text = [\n  `Сверка за ${p.for_date}: ${p.fetched} транзакций, ${fmt(total)} ₽`,\n  `новых ${u.inserted}, изменилось ${u.updated}, без изменений ${unchanged}`,\n  Number(u.rejected) ? `⚠️ отложено ${u.rejected} (смотреть fleet_txn_rejected, run ${p.run_id})` : 'отложенных нет',\n  'Топ-3 водителя: ' + d.slice(0, 3).map((r) => `${r.driver_id} — ${fmt(r.total)} ₽`).join('; '),\n].join('\\n');\nreturn [{ json: { text, for_date: p.for_date, run_id: p.run_id, fetched: p.fetched, total,\n                  inserted: Number(u.inserted), updated: Number(u.updated), rejected: Number(u.rejected) } }];"
+      }
+    },
+    {
+      "id": "n11-23",
+      "name": "Строка в Google-таблицу",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2000,
+        160
+      ],
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "={{ $env.REPORT_SHEET_URL }}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Сверка"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "Дата"
+          ],
+          "value": {
+            "Дата": "={{ $json.for_date }}",
+            "Транзакций": "={{ $json.fetched }}",
+            "Сумма, ₽": "={{ $json.total }}",
+            "Новых": "={{ $json.inserted }}",
+            "Изменилось": "={{ $json.updated }}",
+            "Отложено": "={{ $json.rejected }}",
+            "Запуск": "={{ $json.run_id }}"
+          }
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gsIRuler00000001",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "id": "n12-16",
+      "name": "Отчёт в Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2000,
+        360
+      ],
+      "parameters": {
+        "chatId": "={{ $env.REPORT_CHAT_ID }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "tgIRuler00000001",
+          "name": "Telegram-бот отчётов"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Каждый день 06:00 МСК": {
+      "main": [
+        [
+          {
+            "node": "Параметры",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Перезапуск за дату": {
+      "main": [
+        [
+          {
+            "node": "Параметры",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Отчёт": {
+      "main": [
+        [
+          {
+            "node": "Строка в Google-таблицу",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Отчёт в Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Параметры": {
+      "main": [
+        [
+          {
+            "node": "Журнал: старт",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Журнал: старт": {
+      "main": [
+        [
+          {
+            "node": "Fleet API: транзакции",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fleet API: транзакции": {
+      "main": [
+        [
+          {
+            "node": "Нормализация и проверка",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Нормализация и проверка": {
+      "main": [
+        [
+          {
+            "node": "Запись в PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Запись в PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Журнал: готово",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Журнал: готово": {
+      "main": [
+        [
+          {
+            "node": "Итоги дня по водителям",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Итоги дня по водителям": {
+      "main": [
+        [
+          {
+            "node": "Отчёт",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Moscow",
+    "errorWorkflow": "iRulerFleetErr01",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "pinData": {}
+}

@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Фёдор для iRuler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* те же токены, что у /sellehome и /laffit */
+:root{
+  --bg:#eff2f6; --surface:#ffffff; --surface-2:#e6eaf0; --ink:#121824; --muted:#5c6675; --line:#d4dae3;
+  --accent:#0d6b4f; --accent-ink:#ffffff; --accent-soft:#dcefe6;
+  --warn:#b7791f; --warn-soft:#fbeed5; --good:#1f7a3a; --good-soft:#dcf2e1; --bad:#a23b3b; --bad-soft:#f6dcdc;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  color-scheme:dark }
+
+*{box-sizing:border-box;min-width:0}
+html{color-scheme:light dark;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+a{color:var(--accent)}
+.wrap{max-width:1100px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(26px,4.4vw,42px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,2.6vw,27px);font-weight:700}
+h3{font-size:16px;font-weight:500}
+p{margin:0}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+section{padding-block:44px;border-top:1px solid var(--line)}
+section>.wrap{display:grid;gap:20px}
+.lede{max-width:72ch;font-size:17px}
+.prose{max-width:72ch;display:grid;gap:10px}
+
+.hero{padding-block:48px 40px;display:grid;gap:22px}
+.quote{border-left:3px solid var(--accent);padding:6px 16px;color:var(--muted);max-width:72ch}
+.quote b{color:var(--ink);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+
+.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.answers{grid-template-columns:1fr}}
+.answer{background:var(--surface);border:1px solid var(--line);padding:18px 20px;display:grid;gap:10px;align-content:start}
+.answer .eyebrow{color:var(--accent)}
+.answer p{font-size:15px}
+.answer a.more{font-size:14px}
+
+.card{background:var(--surface);border:1px solid var(--line)}
+.card-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.card-head .eyebrow{color:var(--accent)}
+.card-body{padding:18px 20px;display:grid;gap:14px}
+.note{font-size:13.5px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);line-height:1.5}
+
+/* схема сценария */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;counter-reset:step}
+@media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.flow{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);background:var(--bg);padding:12px 14px;display:grid;gap:4px;align-content:start;position:relative}
+.step::before{counter-increment:step;content:counter(step,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--muted)}
+.step b{font-weight:600;font-size:14.5px}
+.step span{font-size:13px;color:var(--muted);line-height:1.4}
+.step.trigger{border-style:dashed}
+.step.store{border-color:var(--accent)}
+.step.side{border-color:var(--warn)}
+
+.facts{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);border-top:1px solid var(--line)}
+.facts>div{padding:10px 0;border-bottom:1px solid var(--line)}
+.facts>div:nth-child(odd){font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding-right:16px;padding-top:12px}
+@media (max-width:620px){.facts{grid-template-columns:1fr}.facts>div:nth-child(odd){border-bottom:0;padding-bottom:0}}
+.facts ul{margin:0;padding-left:18px;display:grid;gap:4px}
+
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--surface)}
+.tablewrap{overflow:auto}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--surface)}
+@media (max-width:900px){.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.four{grid-template-columns:1fr}}
+.four>div{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:6px;align-content:start}
+.four h3{font-size:14px}
+.four p{font-size:14px;color:var(--muted)}
+
+.traps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.traps{grid-template-columns:1fr}}
+.trap{border:1px solid var(--line);border-left:3px solid var(--warn);background:var(--surface);padding:14px 16px;display:grid;gap:8px}
+.trap p{font-size:14.5px}
+pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);padding:10px 12px;overflow:auto;white-space:pre}
+
+.files{display:flex;flex-wrap:wrap;gap:8px}
+.files a{font-family:var(--mono);font-size:13px;padding:7px 11px;border:1px solid var(--line);background:var(--surface);text-decoration:none;border-radius:4px}
+.files a:hover{border-color:var(--accent)}
+
+/* песочница */
+.sandbox{display:grid;grid-template-columns:minmax(220px,290px) minmax(0,1fr)}
+@media (max-width:900px){.sandbox{grid-template-columns:1fr}}
+.tasks{border-right:1px solid var(--line);display:grid;align-content:start}
+@media (max-width:900px){.tasks{border-right:0;border-bottom:1px solid var(--line);grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);overflow-x:auto}}
+.tasks button{all:unset;cursor:pointer;padding:10px 16px;border-bottom:1px solid var(--line);display:grid;gap:2px;font-size:14px}
+@media (max-width:900px){.tasks button{border-bottom:0;border-right:1px solid var(--line)}}
+.tasks button small{font-size:12px;color:var(--muted);line-height:1.35}
+.tasks button .k{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tasks button:hover{background:var(--surface-2)}
+.tasks button[aria-current="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.tasks button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.editor{padding:16px 20px;display:grid;gap:12px;align-content:start;min-width:0}
+.editor .why{font-size:14.5px}
+textarea{font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:10px 12px;border-radius:4px;width:100%;min-height:220px;resize:vertical;tab-size:2}
+textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+button.btn{font:inherit;font-size:14px;padding:8px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;border-radius:4px}
+button.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button.btn:disabled{opacity:.55;cursor:wait}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.status{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.out{display:grid;gap:10px}
+.out .err{border:1px solid var(--bad);background:var(--bad-soft);padding:10px 12px;font-family:var(--mono);font-size:13px;white-space:pre-wrap}
+.out .ok{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.out .tablewrap{max-height:380px;border:1px solid var(--line)}
+.out table{font-size:13px}
+.out td{white-space:nowrap;font-variant-numeric:tabular-nums}
+.out td.r{text-align:right}
+.out th{position:sticky;top:0;z-index:1}
+.look{font-size:14px;border:1px solid var(--line);background:var(--bg);padding:10px 12px;line-height:1.5}
+.look b{font-weight:600}
+.schema{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.schema b{color:var(--ink);font-weight:500}
+
+.checklist{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:820px){.checklist{grid-template-columns:1fr}}
+.checklist li{background:var(--surface);border:1px solid var(--line);padding:12px 14px;display:grid;gap:4px}
+.checklist li b{font-weight:600}
+.checklist li span{font-size:14px;color:var(--muted)}
+
+.contact{display:grid;gap:12px}
+.contact .row{display:flex;flex-wrap:wrap;gap:8px 20px}
+footer{padding-top:24px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <p class="eyebrow">Фёдор Поплавский · отклик на «Специалист по автоматизации и AI-инструментам (n8n / Python)»</p>
+  <h1>Милена, отвечаю на оба вопроса. На этой странице всё можно запустить и проверить</h1>
+  <p class="quote">Вы спросили, <b>как в моём n8n-процессе устроены источник, этапы, хранение, ошибки и повторные запуски</b> и <b>насколько уверенно я работаю с SQL/PostgreSQL</b>. Рассказать словами мало, поэтому я собрал сценарий под задачу таксопарка и прогнал его в n8n. SQL-задачи по данным парка лежат ниже, они выполняются на настоящем PostgreSQL прямо в браузере.</p>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#n8n">1. Процесс в n8n</a>
+    <a href="#tests">Как я его проверял</a>
+    <a href="#sql">2. SQL: песочница с PostgreSQL</a>
+    <a href="#handover">Как принимаю чужие автоматизации</a>
+    <a href="#me">Обо мне</a>
+  </nav>
+  <div class="answers">
+    <div class="answer">
+      <p class="eyebrow">Вопрос 1 · коротко</p>
+      <p>Каждое утро сценарий забирает транзакции парка из Fleet API за вчерашний день (постранично, повторяет запрос при 429). Он проверяет каждую строку и записывает данные в PostgreSQL через upsert по id транзакции, поэтому повторный запуск ничего не задваивает. Битые строки откладываются в отдельную таблицу с причиной. Каждый запуск пишется в журнал <code>etl_runs</code>. При ошибке срабатывает отдельный сценарий: он помечает запуск в журнале и шлёт алерт со ссылкой на перезапуск за нужную дату.</p>
+      <a class="more" href="#n8n">Схема, файлы и журнал проверки ↓</a>
+    </div>
+    <div class="answer">
+      <p class="eyebrow">Вопрос 2 · коротко</p>
+      <p>Скажу как есть. SQL пишу в своих проектах: JOIN, группировки, upsert через <code>ON CONFLICT</code>, миграции схемы через <code>ALTER TABLE</code> с версией базы. Это всё есть в моей системе учёта ТО для парка спецтехники, работает на SQLite. С PostgreSQL в продакшене у меня опыта меньше. Поэтому ниже 13 задач на данных таксопарка: сводки, отток водителей, двойные выплаты, разбор запроса с раздутыми суммами, миграция с откатом, EXPLAIN до и после индекса.</p>
+      <a class="more" href="#sql">Открыть песочницу ↓</a>
+    </div>
+  </div>
+</header>
+
+<section id="n8n">
+  <div class="wrap">
+    <p class="eyebrow">Вопрос 1</p>
+    <h2>Сверка транзакций парка: Fleet API → PostgreSQL → отчёт</h2>
+    <p class="lede">У партнёра Яндекс Такси с 40 000 водителей типичная ручная работа — каждый день сверять, что пришло из Fleet API, и считать итоги по водителям. Этот процесс я и собрал.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="eyebrow">Схема · 12 узлов + сценарий ошибок</span><span class="muted mono" style="font-size:12.5px">n8n 1.123 · PostgreSQL 14+</span></div>
+      <div class="card-body">
+        <div class="flow">
+          <div class="step trigger"><b>Каждый день 06:00 МСК</b><span>Schedule Trigger, часовой пояс задан в настройках сценария</span></div>
+          <div class="step trigger"><b>Перезапуск за дату</b><span>Webhook <code>GET …/fleet-txn-rerun?date=2026-10-24</code> — для ручного догона</span></div>
+          <div class="step"><b>Параметры</b><span>Дата: из запроса или «вчера по Москве». Неверный формат и незакрытый день сразу дают ошибку</span></div>
+          <div class="step store"><b>Журнал: старт</b><span><code>etl_runs</code>: запуск = id выполнения n8n, статус running</span></div>
+          <div class="step"><b>Fleet API: транзакции</b><span>POST, пагинация по cursor, 300 мс между страницами, 4 попытки с паузой 5 с, ключ в credentials</span></div>
+          <div class="step"><b>Нормализация и проверка</b><span>Все страницы в одну пачку. Нет водителя или сумма не число — строка откладывается с причиной. Дубли по id убираются. 0 транзакций — стоп, база не трогается</span></div>
+          <div class="step store"><b>Запись в PostgreSQL</b><span>Один запрос: <code>jsonb_to_recordset</code> + <code>ON CONFLICT (txn_id)</code>, считает новые, изменённые и без изменений</span></div>
+          <div class="step store"><b>Журнал: готово</b><span>ok и цифры: получено / новых / изменилось / отложено</span></div>
+          <div class="step"><b>Итоги дня по водителям</b><span><code>GROUP BY driver_id</code> за дату</span></div>
+          <div class="step"><b>Отчёт</b><span>Текст сводки и строка для таблицы</span></div>
+          <div class="step side"><b>Строка в Google-таблицу</b><span>appendOrUpdate по дате: перезапуск обновляет строку, а не добавляет новую</span></div>
+          <div class="step side"><b>Отчёт в Telegram</b><span>Сводка, топ водителей, предупреждение об отложенных строках</span></div>
+        </div>
+        <div class="facts">
+          <div>Откуда данные</div>
+          <div>Fleet API Яндекс Про, <code>/v2/parks/transactions/list</code> за прошедшие сутки по Москве. Заголовки X-Client-ID и X-Park-ID берутся из переменных окружения, X-API-Key хранится в credentials n8n, в JSON сценария секретов нет.</div>
+          <div>Этапы</div>
+          <div>Параметры → журнал → выгрузка всех страниц → проверка каждой строки → upsert → журнал → итоги → таблица и Telegram.</div>
+          <div>Где результат</div>
+          <div><ul>
+            <li><code>fleet_txn</code> — транзакции, ключ <code>txn_id</code>;</li>
+            <li><code>fleet_txn_rejected</code> — отложенные строки с причиной и исходным JSON, ничего не теряется молча;</li>
+            <li><code>etl_runs</code> — журнал запусков;</li>
+            <li>строка дня в Google-таблице и сообщение в Telegram.</li>
+          </ul></div>
+          <div>Ошибки</div>
+          <div><ul>
+            <li>сеть, 429 и 5xx: 4 попытки с паузой 5 с;</li>
+            <li>битые строки не роняют запуск, а уходят в <code>fleet_txn_rejected</code>, в отчёте видно сколько;</li>
+            <li>подозрительный ответ (0 транзакций, ответ без <code>transactions</code>) роняет запуск до записи в базу;</li>
+            <li>любое падение запускает отдельный сценарий ошибок: <code>etl_runs.status = 'error'</code> с текстом и узлом, плюс алерт в Telegram со ссылкой на выполнение и готовой командой перезапуска.</li>
+          </ul></div>
+          <div>Повторные запуски</div>
+          <div>Запуск за ту же дату безопасен: <code>ON CONFLICT (txn_id) DO UPDATE … WHERE значения отличаются</code>. Совпавшие строки не трогаются, изменённые обновляются, отчёт пишет, сколько каких. Строка в таблице обновляется по дате. Пропущенный день догоняется вебхуком с <code>?date=</code>. Сегодняшний и будущие дни сценарий не принимает.</div>
+        </div>
+      </div>
+      <div class="note">В тесте вместо настоящего Fleet API стоял мой локальный сервер, он отдаёт ответы той же формы. Поля взяты из документации Fleet API, на вашем ключе сверю их в первый же день. Узлы Google Sheets и Telegram в тесте были выключены: им нужен ваш доступ. Остальное проверено на n8n 1.123 и PostgreSQL 18.</div>
+    </div>
+
+    <div class="four" aria-label="Что изменилось, как проверить, что может сломаться, как восстановить">
+      <div><h3>Что меняет</h3><p>Добавляет и обновляет строки в трёх таблицах. Чужие данные не удаляет, схему не трогает.</p></div>
+      <div><h3>Как проверить</h3><p><code>etl_runs</code>: статус ok, получено = новых + изменилось + без изменений + отложено. Сумма за день в отчёте совпадает с <code>sum(amount)</code> в базе.</p></div>
+      <div><h3>Что может сломаться</h3><p>Fleet API поменяет формат или лимиты. Ключ отзовут. День может выгрузиться не полностью, если API отдаст часть страниц.</p></div>
+      <div><h3>Как восстановить</h3><p>Алерт назовёт узел и дату. Чиню причину и перезапускаю дату вебхуком: upsert сам дотянет недостающее без дублей.</p></div>
+    </div>
+
+    <div class="files" aria-label="Файлы">
+      <a href="n8n/fleet-txn.workflow.json" download>fleet-txn.workflow.json</a>
+      <a href="n8n/fleet-txn-errors.workflow.json" download>fleet-txn-errors.workflow.json</a>
+      <a href="n8n/schema.sql" download>schema.sql</a>
+    </div>
+    <p class="muted" style="font-size:14px;max-width:72ch">Как поставить: выполнить <code>schema.sql</code>, импортировать оба JSON, создать три credentials (Postgres, Header Auth с X-API-Key, Telegram) и задать переменные <code>FLEET_PARK_ID</code>, <code>FLEET_CLIENT_ID</code>, <code>REPORT_SHEET_URL</code>, <code>REPORT_CHAT_ID</code>, <code>ALERT_CHAT_ID</code>. В n8n 2.x доступ к <code>$env</code> по умолчанию закрыт, там эти значения лучше вынести в узел «Параметры».</p>
+  </div>
+</section>
+
+<section id="tests">
+  <div class="wrap">
+    <p class="eyebrow">Проверка</p>
+    <h2>Пять прогонов в n8n и две ловушки, которые они поймали</h2>
+    <div class="card">
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Что проверял</th><th>Как</th><th>Результат</th></tr></thead>
+          <tbody>
+            <tr><td>Обычный запуск</td><td>Вебхук за 24.10. Тестовый сервер на первый запрос отвечает 429, затем отдаёт 230 транзакций тремя страницами, среди них 24 битых</td><td><span class="pill good">ok</span> повтор через 5 с → 100 + 100 + 30 → новых 206, отложено 24 (17 «сумма не число», 7 «нет водителя»), 6,2 с</td></tr>
+            <tr><td>Повторный запуск</td><td>Руками поменял сумму одной транзакции в базе и запустил ту же дату ещё раз</td><td><span class="pill good">ok</span> новых 0, изменилось 1, без изменений 205. Сумма дня вернулась к 120 868 ₽, дублей нет</td></tr>
+            <tr><td>Неверная дата</td><td><code>?date=24.10.2026</code></td><td><span class="pill warn">стоп</span> «Неверная дата, нужен формат 2026-10-26». В базу ничего не записано, сценарий ошибок отправил алерт</td></tr>
+            <tr><td>Незакрытый день</td><td><code>?date=2099-01-01</code></td><td><span class="pill warn">стоп</span> «День ещё не закончился — грузим только закрытые дни»</td></tr>
+            <tr><td>Неверный ключ</td><td>Подменил X-API-Key в credentials</td><td><span class="pill bad">error</span> 401 → 4 попытки → <code>etl_runs</code>: error, «Fleet API: транзакции: Authorization failed», алерт с датой 2026-10-23 и командой перезапуска</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="traps">
+      <div class="trap">
+        <h3>Пагинация n8n молча глотает 429</h3>
+        <p>Первый прогон завершился «успешно» с пустыми данными. Остановила его только моя проверка «0 транзакций». В исходниках n8n нашёл причину: код ответа проверяется, только если пагинация продолжается. Ответ 429 без cursor считается последней страницей, поэтому повтор не срабатывает. Исправил условием завершения:</p>
+        <pre>completeExpression:
+  {{ $response.statusCode &lt; 300 &amp;&amp; !$response.body.cursor }}</pre>
+        <p>Теперь 429 идёт в повтор. Для надёжности ответ без <code>transactions</code> отдельно роняет запуск.</p>
+      </div>
+      <div class="trap">
+        <h3>Ссылки <code>$('Узел')</code> в HTTP Request приходили пустыми</h3>
+        <p>Тело запроса и заголовки, собранные через <code>$('Параметры').first().json…</code>, вычислялись в пустоту: «JSON parameter needs to be valid JSON», X-Park-ID = undefined. Как проверил, через <code>$json</code> всё работает. Переделал сценарий: каждый узел передаёт дальше ровно то, что нужно следующему (Postgres через <code>RETURNING</code>). Поток данных стал виден по самим узлам, без скрытых ссылок через полсхемы.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <h3>Что доделал бы на рабочем стенде</h3>
+      <p class="muted">401 и 403 повторять бессмысленно: сейчас n8n повторяет любую ошибку, и на неверном ключе уходит 16 секунд. Ещё добавил бы блокировку параллельного запуска за одну дату (<code>pg_try_advisory_lock</code>) и сверку итога дня с балансом из Fleet API, а workflow хранил бы в Git: экспорт по расписанию даёт историю изменений.</p>
+    </div>
+  </div>
+</section>
+
+<section id="sql">
+  <div class="wrap">
+    <p class="eyebrow">Вопрос 2</p>
+    <h2>SQL на данных таксопарка: настоящий PostgreSQL в браузере</h2>
+    <p class="lede">Ниже PGlite — PostgreSQL, собранный в WebAssembly. Он запускается у вас на странице и при загрузке генерирует тестовый парк. Задачи готовые, но текст запроса можно менять и запускать свой: <kbd>Ctrl</kbd>+<kbd>Enter</kbd>. Сервера нет, всё выполняется только в вашем браузере.</p>
+    <div class="card">
+      <div class="card-head">
+        <span class="eyebrow">Песочница</span>
+        <span class="schema" id="schema">загружаю PostgreSQL…</span>
+      </div>
+      <div class="sandbox">
+        <nav class="tasks" id="tasks" aria-label="Задачи"></nav>
+        <div class="editor">
+          <p class="why" id="why"></p>
+          <textarea id="sql" spellcheck="false" aria-label="SQL-запрос"></textarea>
+          <div class="btns">
+            <button class="btn primary" id="run" disabled>Выполнить</button>
+            <button class="btn" id="restore">Вернуть текст задачи</button>
+            <button class="btn" id="reset" disabled>Пересоздать базу</button>
+            <span class="status" id="status"></span>
+          </div>
+          <div class="out" id="out" aria-live="polite"></div>
+          <div class="look" id="look" hidden></div>
+        </div>
+      </div>
+      <div class="note">Таблицы: <code>parks</code> (30 парков, комиссия), <code>drivers</code> (2000 водителей), <code>trips</code> (≈23 тыс. поездок за 30 дней, наличные/карта/корпоратив, отмены), <code>payouts</code> (недельные выплаты: безнал минус комиссия). В данные специально заложены водители, которые перестали выходить на линию, и выплаты, записанные дважды. Порядок важен только в задачах 9, 10 и 12: они меняют схему, кнопка «Пересоздать базу» возвращает всё как было.</div>
+    </div>
+  </div>
+</section>
+
+<section id="handover">
+  <div class="wrap">
+    <p class="eyebrow">Первая неделя</p>
+    <h2>Как я принимаю автоматизации от подрядчика</h2>
+    <p class="lede">В вакансии сказано, что n8n и боты переходят к вам от подрядчиков. До первой правки я делаю так:</p>
+    <ul class="checklist">
+      <li><b>Опись</b><span>Все workflow: что запускает, куда пишет, когда последний раз срабатывал и чей это процесс. Неактивные и дубли помечаю, сразу не удаляю.</span></li>
+      <li><b>Доступы и секреты</b><span>Какие credentials за что отвечают и чьи это аккаунты. Токены подрядчика в первую очередь меняю на ключи компании.</span></li>
+      <li><b>Бэкап до правок</b><span>Экспорт всех workflow и credentials (зашифрованно) в Git, дамп базы n8n. Любую правку можно откатить.</span></li>
+      <li><b>Сценарий ошибок</b><span>Проверяю, что у каждого важного workflow есть Error Workflow с алертом. Падение не должно оставаться незамеченным.</span></li>
+      <li><b>Боты</b><span>Где работают (VPS, Docker, systemd), как перезапускаются, куда пишут логи, кто владелец токена в BotFather.</span></li>
+      <li><b>Карта процессов</b><span>Одна страница: процесс → workflow → таблицы и боты → кто пользуется. С ней разбирать задачи из голосовых быстрее.</span></li>
+      <li><b>Правки по одной</b><span>Каждая правка проходит четыре вопроса из вашей вакансии: что изменилось, как проверить, что может сломаться, как восстановить. Ответы записываю в описании workflow или коммита.</span></li>
+      <li><b>Claude и Codex</b><span>Использую каждый день для разбора чужого кода и документации. За результат отвечаю сам: объясняю и проверяю каждую правку до выката.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="me">
+  <div class="wrap contact">
+    <p class="eyebrow">Обо мне</p>
+    <h2>Фёдор Поплавский, Омск, удалённо</h2>
+    <div class="prose">
+      <p>Три года проектной работы: боты, автоматизация, интеграции. Главный проект — <b>TO-Uchet</b>, учёт техники и ТО для парка из 93 машин дочерней компании РЖД. Его используют каждый день. Процесс разбирал с механиком и начальником участка. Внутри Python, SQLite с миграциями схемы, импорт из их Google-таблицы с проверкой дублей, резервная копия перед каждой загрузкой, 286 тестов.</p>
+      <p>Ещё в портфолио: Telegram-ассистент с базой знаний и передачей оператору (Python и тот же сценарий в n8n), сборщик данных через API 2ГИС с повторами и лимитами, LLM-конвейер заявок. Работаю с Linux/VPS, Docker, Git. Claude Code и Codex — каждый день. На связи весь день по МСК.</p>
+    </div>
+    <div class="row">
+      <a href="https://t.me/Feodor_Russkiy">Telegram: @Feodor_Russkiy</a>
+      <a href="https://github.com/dobrewoks1">GitHub: dobrewoks1</a>
+    </div>
+    <footer>Страницу и сценарий собирал вместе с Claude Code 27.10.2026. Данные в песочнице и в тестах сгенерированы и к реальным паркам отношения не имеют.</footer>
+  </div>
+</section>
+
+<script type="module">
+const SEED = String.raw`
+SET TIME ZONE 'Europe/Moscow';
+SELECT setseed(0.42);
+CREATE TABLE parks (
+  id int PRIMARY KEY, name text NOT NULL, city text NOT NULL,
+  commission_pct numeric(4,2) NOT NULL CHECK (commission_pct BETWEEN 0 AND 20)
+);
+INSERT INTO parks
+SELECT g,
+       'Парк «' || (ARRAY['Север','Восток','Магистраль','Город','Альфа','Трасса','Мотор','Центр','Лидер','Пилот'])[1 + (g - 1) % 10]
+         || '»' || CASE WHEN g > 10 THEN '-' || ((g - 1) / 10 + 1) ELSE '' END,
+       (ARRAY['Москва','Санкт-Петербург','Нижний Новгород','Казань','Екатеринбург','Новосибирск'])[1 + (g * 7) % 6],
+       round((3 + random() * 4)::numeric, 2)
+FROM generate_series(1, 30) g;
+CREATE TABLE drivers (
+  id int PRIMARY KEY, park_id int NOT NULL REFERENCES parks(id), full_name text NOT NULL,
+  hired_at date NOT NULL, status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','blocked','fired'))
+);
+INSERT INTO drivers
+SELECT g, 1 + floor(random() * 30)::int,
+       (ARRAY['Иванов','Смирнов','Кузнецов','Попов','Васильев','Петров','Соколов','Михайлов','Новиков','Фёдоров',
+              'Морозов','Волков','Алексеев','Лебедев','Семёнов','Егоров','Павлов','Козлов','Степанов','Николаев',
+              'Каримов','Алиев','Юсупов','Рахимов'])[1 + floor(random() * 24)::int]
+         || ' ' || (ARRAY['А.','Б.','В.','Г.','Д.','Е.','И.','К.','М.','Н.','О.','Р.','С.','Т.'])[1 + floor(random() * 14)::int],
+       date '2026-10-26' - (30 + floor(random() * 900))::int,
+       CASE WHEN random() < 0.05 THEN 'blocked' WHEN random() < 0.03 THEN 'fired' ELSE 'active' END
+FROM generate_series(1, 2000) g;
+CREATE TABLE trips (
+  id bigserial PRIMARY KEY, driver_id int NOT NULL REFERENCES drivers(id), started_at timestamptz NOT NULL,
+  price numeric(10,2) NOT NULL CHECK (price > 0),
+  payment text NOT NULL CHECK (payment IN ('card','cash','corp')),
+  status text NOT NULL CHECK (status IN ('done','cancelled'))
+);
+INSERT INTO trips (driver_id, started_at, price, payment, status)
+SELECT d.id,
+       timestamptz '2026-10-26 00:00' - make_interval(days => d.gap + floor(random() * (30 - d.gap))::int,
+                                                      mins => floor(random() * 1440)::int),
+       round((180 + random() * random() * 2200)::numeric, 2),
+       (ARRAY['card','card','card','cash','corp'])[1 + floor(random() * 5)::int],
+       CASE WHEN random() < 0.07 THEN 'cancelled' ELSE 'done' END
+FROM (SELECT id,
+             CASE WHEN random() < 0.12 THEN 8 + floor(random() * 15)::int ELSE 0 END AS gap,
+             CASE WHEN random() < 0.06 THEN 0 ELSE 2 + floor(random() * 22)::int END AS n
+      FROM drivers) d
+CROSS JOIN LATERAL generate_series(1, d.n) s;
+CREATE TABLE payouts (
+  id bigserial PRIMARY KEY, driver_id int NOT NULL REFERENCES drivers(id),
+  week_start date NOT NULL, amount numeric(12,2) NOT NULL, paid_at timestamptz NOT NULL
+);
+INSERT INTO payouts (driver_id, week_start, amount, paid_at)
+SELECT driver_id, wk, round(sum(price) * (1 - commission_pct / 100), 2), (wk + 7) + time '10:00'
+FROM (SELECT t.driver_id, t.price, p.commission_pct, date_trunc('week', t.started_at)::date AS wk
+      FROM trips t JOIN drivers d ON d.id = t.driver_id JOIN parks p ON p.id = d.park_id
+      WHERE t.status = 'done' AND t.payment <> 'cash') s
+WHERE wk + 7 <= date '2026-10-26'
+GROUP BY driver_id, wk, commission_pct
+ORDER BY wk, driver_id;
+INSERT INTO payouts (driver_id, week_start, amount, paid_at)
+SELECT driver_id, week_start, amount, paid_at + interval '3 minutes' FROM payouts WHERE id % 97 = 0;
+ANALYZE;
+`;
+
+const TASKS = [
+{ k: 'JOIN · GROUP BY', t: 'Сводка по паркам за неделю', s: 'водители на линии, отмены, выручка, доход парка',
+  why: 'Отчёт, который обычно собирают руками: три таблицы, условные агрегаты FILTER и доход парка по его комиссии.',
+  look: '<b>На что смотреть:</b> в GROUP BY стоит только <code>p.id</code>. Остальные поля парка Postgres разрешает не перечислять, потому что <code>p.id</code> — первичный ключ. Доля отмен считается через <code>FILTER</code>, без подзапросов.',
+  sql: `-- Сводка по паркам за неделю 19–25 октября
+SELECT p.name AS park, p.city,
+       count(DISTINCT t.driver_id)                                   AS drivers_on_line,
+       count(*) FILTER (WHERE t.status = 'done')                     AS trips_done,
+       round(100.0 * count(*) FILTER (WHERE t.status = 'cancelled')
+             / count(*), 1)                                          AS cancel_pct,
+       sum(t.price) FILTER (WHERE t.status = 'done')                 AS gmv_rub,
+       round(sum(t.price) FILTER (WHERE t.status = 'done')
+             * p.commission_pct / 100, 2)                            AS park_income_rub
+FROM trips t
+JOIN drivers d ON d.id = t.driver_id
+JOIN parks   p ON p.id = d.park_id
+WHERE t.started_at >= '2026-10-19' AND t.started_at < '2026-10-26'
+GROUP BY p.id
+ORDER BY gmv_rub DESC;` },
+{ k: 'LEFT JOIN · HAVING', t: 'Кто перестал выходить на линию', s: 'активные водители без поездок 7+ дней',
+  why: 'Список для обзвона или рассылки: водитель числится активным, но неделю не берёт заказы или не вышел ни разу.',
+  look: '<b>На что смотреть:</b> условие <code>t.status = \'done\'</code> стоит в <code>ON</code>, а не в <code>WHERE</code>. В WHERE оно выкинуло бы водителей без поездок, и LEFT JOIN тихо превратился бы в обычный JOIN. Это частая ошибка в отчётах «кого нет».',
+  sql: `-- Активные водители, которые 7+ дней не выходят на линию (или не вышли ни разу)
+SELECT d.id, d.full_name, p.name AS park,
+       max(t.started_at)::date                       AS last_trip,
+       date '2026-10-26' - max(t.started_at)::date   AS days_off,
+       count(t.id)                                   AS trips_30d
+FROM drivers d
+JOIN parks p ON p.id = d.park_id
+LEFT JOIN trips t ON t.driver_id = d.id AND t.status = 'done'
+WHERE d.status = 'active'
+GROUP BY d.id, p.name
+HAVING max(t.started_at) < '2026-10-19' OR max(t.started_at) IS NULL
+ORDER BY days_off DESC NULLS FIRST, trips_30d DESC;` },
+{ k: 'оконные функции', t: 'Топ-3 водителя в каждом парке', s: 'row_number() OVER (PARTITION BY …)',
+  why: 'Лучшие водители каждого парка — для бонусов или разговора с партнёром. Одним запросом, без цикла по паркам.',
+  look: '<b>На что смотреть:</b> оконная функция ранжирует уже сгруппированные строки. Вторая оконная сумма считается после <code>WHERE place &lt;= 3</code>, поэтому доля — внутри тройки, а не по всему парку.',
+  sql: `-- Топ-3 водителя по выручке в каждом парке
+WITH ranked AS (
+  SELECT d.park_id, d.full_name, sum(t.price) AS gmv,
+         row_number() OVER (PARTITION BY d.park_id ORDER BY sum(t.price) DESC) AS place
+  FROM trips t
+  JOIN drivers d ON d.id = t.driver_id
+  WHERE t.status = 'done'
+  GROUP BY d.park_id, d.id
+)
+SELECT p.name AS park, r.place, r.full_name, r.gmv,
+       round(100 * r.gmv / sum(r.gmv) OVER (PARTITION BY r.park_id), 1) AS share_in_top3_pct
+FROM ranked r
+JOIN parks p ON p.id = r.park_id
+WHERE r.place <= 3
+ORDER BY p.name, r.place;` },
+{ k: 'поиск дублей', t: 'Двойные выплаты', s: 'одна выплата записана дважды',
+  why: 'Повторный импорт выписки записал часть выплат второй раз. Нужно найти их и посчитать, на сколько завышены суммы.',
+  look: '<b>На что смотреть:</b> <code>array_agg(id)</code> сразу даёт id записей для разбора. Колонка extra_rub — на сколько завышено. Задача 9 сделает такие дубли невозможными на уровне базы.',
+  sql: `-- Одна и та же выплата записана дважды: водитель, неделя и сумма совпадают
+SELECT pa.driver_id, d.full_name, pa.week_start, pa.amount,
+       count(*)                          AS times,
+       array_agg(pa.id ORDER BY pa.id)   AS payout_ids,
+       pa.amount * (count(*) - 1)        AS extra_rub
+FROM payouts pa
+JOIN drivers d ON d.id = pa.driver_id
+GROUP BY pa.driver_id, d.full_name, pa.week_start, pa.amount
+HAVING count(*) > 1
+ORDER BY extra_rub DESC;` },
+{ k: 'разбор ошибки', t: '❌ Суммы раздуты в разы', s: 'JOIN двух «многих» таблиц',
+  why: 'Типичный баг отчёта «начислено и выплачено». Запустите и сравните paid_total с trips_total: выплачено будто бы больше, чем заработано.',
+  look: '<b>Почему так:</b> у водителя N поездок и M выплат. JOIN по driver_id даёт N × M строк, и каждая сумма умножается на число строк из другой таблицы. Ошибки СУБД нет, цифры просто неверные, поэтому такой баг и опасен. Исправление — в следующей задаче.',
+  sql: `-- ❌ «Начислено и выплачено» по водителю
+SELECT d.id, d.full_name,
+       sum(t.price)   AS trips_total,
+       sum(pa.amount) AS paid_total
+FROM drivers d
+JOIN trips   t  ON t.driver_id  = d.id AND t.status = 'done' AND t.payment <> 'cash'
+JOIN payouts pa ON pa.driver_id = d.id
+GROUP BY d.id
+ORDER BY d.id
+LIMIT 5;` },
+{ k: 'исправление', t: '✅ Сверка начислено ↔ выплачено', s: 'агрегировать до JOIN',
+  why: 'Каждую таблицу сначала сворачиваем до одной строки на водителя, потом соединяем. Сравниваем «должны были выплатить» с «выплатили».',
+  look: '<b>Проверка сама себя:</b> вверху списка с большой разницей diff — те же водители, что в задаче 4 (двойные выплаты). У остальных diff в пределах копеек от округления по неделям. Два независимых запроса сошлись, значит считаем правильно.',
+  sql: `-- ✅ Сначала агрегируем каждую таблицу, потом соединяем: одна строка на водителя
+WITH tr AS (
+  SELECT driver_id, sum(price) AS trips_total
+  FROM trips WHERE status = 'done' AND payment <> 'cash'
+  GROUP BY driver_id
+), pa AS (
+  SELECT driver_id, sum(amount) AS paid_total
+  FROM payouts GROUP BY driver_id
+)
+SELECT d.id, d.full_name, p.commission_pct,
+       tr.trips_total,
+       round(tr.trips_total * (1 - p.commission_pct / 100), 2)            AS should_pay,
+       coalesce(pa.paid_total, 0)                                         AS paid_total,
+       coalesce(pa.paid_total, 0)
+         - round(tr.trips_total * (1 - p.commission_pct / 100), 2)        AS diff
+FROM drivers d
+JOIN parks p ON p.id = d.park_id
+JOIN tr      ON tr.driver_id = d.id
+LEFT JOIN pa ON pa.driver_id = d.id
+ORDER BY abs(coalesce(pa.paid_total, 0)
+             - round(tr.trips_total * (1 - p.commission_pct / 100), 2)) DESC
+LIMIT 15;` },
+{ k: 'разбор ошибки', t: '❌ must appear in the GROUP BY', s: 'читаем ошибку Postgres',
+  why: 'Запрос падает с ошибкой. Запустите: ниже будет точный текст от Postgres.',
+  look: '<b>Как читать:</b> Postgres не знает, какое из сотни имён водителей парка показать в одной строке. Выбрать нужно одно. Либо группировать по водителю (<code>GROUP BY p.name, d.id, d.full_name</code>) — тогда будет строка на водителя. Либо убрать <code>d.full_name</code> или свернуть его (<code>count(DISTINCT d.id)</code>) — тогда строка на парк. Попробуйте исправить прямо в поле и запустить снова.',
+  sql: `-- ❌ Поездки по паркам и водителям
+SELECT p.name AS park, d.full_name, count(*) AS trips
+FROM trips t
+JOIN drivers d ON d.id = t.driver_id
+JOIN parks   p ON p.id = d.park_id
+GROUP BY p.name
+ORDER BY trips DESC;` },
+{ k: 'ALTER TABLE', t: '❌ Запретить двойные выплаты', s: 'ограничение падает на дублях',
+  why: 'Хотим, чтобы база сама не давала записать вторую выплату за ту же неделю. Попытка «в лоб» упадёт: в данных уже есть дубли.',
+  look: '<b>Как читать:</b> в DETAIL Postgres называет первую же пару (водитель, неделя), которая мешает. Таких пар столько, сколько нашла задача 4. Ограничение не добавилось, данные не тронуты. Порядок исправления — в следующей задаче.',
+  sql: `-- Просто добавить ограничение — упадёт на существующих дублях
+ALTER TABLE payouts ADD CONSTRAINT payouts_one_per_week UNIQUE (driver_id, week_start);` },
+{ k: 'миграция', t: '✅ Миграция с резервной копией', s: 'BEGIN … проверка … COMMIT',
+  why: 'Та же цель, но правильно: сначала убираем дубли с резервной копией, потом добавляем ограничение. Всё в одной транзакции.',
+  look: '<b>Порядок:</b> дубли переносятся в резервную таблицу, затем удаляются из payouts, затем добавляется ограничение, затем проверка до COMMIT. Если любой шаг падает, база остаётся как была. Откат после COMMIT записан в комментарии внизу. Запустите повторно — упадёт на CREATE TABLE: защита от двойного применения миграции.',
+  sql: `BEGIN;
+CREATE TABLE payouts_dupes_backup AS
+SELECT p.* FROM payouts p
+WHERE EXISTS (SELECT 1 FROM payouts q
+              WHERE q.driver_id = p.driver_id AND q.week_start = p.week_start AND q.id < p.id);
+
+DELETE FROM payouts p USING payouts_dupes_backup b WHERE p.id = b.id;
+
+ALTER TABLE payouts ADD CONSTRAINT payouts_one_per_week UNIQUE (driver_id, week_start);
+
+SELECT (SELECT count(*) FROM payouts_dupes_backup)                          AS moved_to_backup,
+       (SELECT count(*) FROM payouts)                                       AS payouts_left,
+       (SELECT count(*) FROM pg_constraint WHERE conname = 'payouts_one_per_week') AS constraint_ok;
+COMMIT;
+
+-- Откат после COMMIT:
+--   ALTER TABLE payouts DROP CONSTRAINT payouts_one_per_week;
+--   INSERT INTO payouts SELECT * FROM payouts_dupes_backup;` },
+{ k: 'ALTER TABLE · UPDATE FROM', t: 'Новая колонка с заполнением', s: 'last_trip_at по истории поездок',
+  why: 'Чтобы отчёт «кто пропал» не пересчитывал все поездки, добавляем водителю колонку с датой последней поездки и заполняем её одним UPDATE из истории.',
+  look: '<b>На что смотреть:</b> <code>IF NOT EXISTS</code> позволяет запускать миграцию повторно. Проверочный SELECT внутри транзакции: filled + never_drove = drivers. Если цифры не сошлись, вместо COMMIT пишется ROLLBACK.',
+  sql: `BEGIN;
+ALTER TABLE drivers ADD COLUMN IF NOT EXISTS last_trip_at timestamptz;
+
+UPDATE drivers d SET last_trip_at = t.last_at
+FROM (SELECT driver_id, max(started_at) AS last_at
+      FROM trips WHERE status = 'done' GROUP BY driver_id) t
+WHERE t.driver_id = d.id;
+
+SELECT count(*)                                     AS drivers,
+       count(last_trip_at)                          AS filled,
+       count(*) FILTER (WHERE last_trip_at IS NULL) AS never_drove
+FROM drivers;
+COMMIT;` },
+{ k: 'EXPLAIN ANALYZE', t: 'Без индекса', s: 'Seq Scan по всем поездкам',
+  why: 'Карточка водителя: его поездки за неделю. Смотрим, как Postgres ищет строки, пока индекса нет.',
+  look: '<b>На что смотреть:</b> <code>Seq Scan</code> и <code>Rows Removed by Filter</code>. Чтобы найти одну-две поездки, Postgres перебирает все 23 тысячи. На 40 000 водителей и годе истории это будут миллионы строк на каждое открытие карточки.',
+  sql: `EXPLAIN ANALYZE
+SELECT * FROM trips
+WHERE driver_id = 1234 AND started_at >= '2026-10-19';` },
+{ k: 'EXPLAIN ANALYZE', t: 'С индексом', s: 'составной индекс (driver_id, started_at)',
+  why: 'Тот же запрос после составного индекса: сначала поле с равенством, потом поле с диапазоном.',
+  look: '<b>На что смотреть:</b> <code>Index Scan using trips_driver_started</code> и <code>Index Cond</code> с обоими условиями. Порядок колонок важен: индекс <code>(started_at, driver_id)</code> для этого запроса работал бы хуже.',
+  sql: `CREATE INDEX IF NOT EXISTS trips_driver_started ON trips (driver_id, started_at);
+ANALYZE trips;
+
+EXPLAIN ANALYZE
+SELECT * FROM trips
+WHERE driver_id = 1234 AND started_at >= '2026-10-19';` },
+{ k: 'свой запрос', t: 'Ваш запрос', s: 'любой SQL по этим таблицам',
+  why: 'Напишите любой запрос по parks, drivers, trips, payouts. Схема — в шапке песочницы.',
+  look: '',
+  sql: `-- Например: средний чек и доля наличных по городам
+SELECT p.city,
+       round(avg(t.price), 2)                                            AS avg_check,
+       round(100.0 * count(*) FILTER (WHERE t.payment = 'cash') / count(*), 1) AS cash_pct
+FROM trips t
+JOIN drivers d ON d.id = t.driver_id
+JOIN parks   p ON p.id = d.park_id
+WHERE t.status = 'done'
+GROUP BY p.city
+ORDER BY avg_check DESC;` },
+];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let db = null;
+let current = 0;
+let busy = false;
+
+function renderTasks() {
+  $('tasks').innerHTML = TASKS.map((t, i) =>
+    `<button type="button" data-i="${i}" aria-current="${i === current}"><span class="k">${String(i + 1).padStart(2, '0')} · ${esc(t.k)}</span>${esc(t.t)}<small>${esc(t.s)}</small></button>`).join('');
+}
+function selectTask(i, focus) {
+  current = i;
+  renderTasks();
+  if (focus) $('tasks').querySelector(`[data-i="${i}"]`).focus();
+  const t = TASKS[i];
+  $('why').textContent = t.why;
+  $('sql').value = t.sql;
+  $('out').innerHTML = '';
+  $('look').hidden = true;
+}
+$('tasks').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-i]');
+  if (b) selectTask(Number(b.dataset.i), true);
+});
+$('restore').addEventListener('click', () => { $('sql').value = TASKS[current].sql; });
+
+function plural(n, one, few, many) {
+  const m10 = n % 10, m100 = n % 100;
+  const w = m10 === 1 && m100 !== 11 ? one : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? few : many;
+  return `${n} ${w}`;
+}
+const NUM = new Set([20, 21, 23, 700, 701, 1700]);
+function cell(v, numeric) {
+  if (v === null || v === undefined) return '<td class="muted">null</td>';
+  if (Array.isArray(v)) v = '{' + v.join(',') + '}';
+  else if (typeof v === 'object') v = JSON.stringify(v);
+  return `<td${numeric ? ' class="r"' : ''}>${esc(v)}</td>`;
+}
+function renderResult(r) {
+  const nums = r.fields.map((f) => NUM.has(f.dataTypeID));
+  const rows = r.rows.slice(0, 300);
+  const head = r.fields.map((f, i) => `<th${nums[i] ? ' class="r"' : ''}>${esc(f.name)}</th>`).join('');
+  const body = rows.map((row) => '<tr>' + r.fields.map((f, i) => cell(row[f.name], nums[i])).join('') + '</tr>').join('');
+  const more = r.rows.length > rows.length ? ` · показаны первые ${rows.length}` : '';
+  return `<p class="ok">${plural(r.rows.length, 'строка', 'строки', 'строк')}${more}</p><div class="tablewrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+async function run() {
+  if (!db || busy) return;
+  busy = true;
+  $('run').disabled = true;
+  $('status').textContent = 'выполняю…';
+  const sql = $('sql').value;
+  const t0 = performance.now();
+  try {
+    const res = await db.exec(sql);
+    const ms = Math.round(performance.now() - t0);
+    const sets = res.filter((r) => r.fields.length);
+    const changed = res.filter((r) => !r.fields.length && r.affectedRows).reduce((s, r) => s + r.affectedRows, 0);
+    let html = sets.length ? sets.slice(-2).map(renderResult).join('') : '';
+    html += `<p class="ok">готово за ${ms} мс${changed ? ` · затронуто строк: ${changed}` : ''}${sets.length ? '' : ' · запрос не вернул таблицу'}</p>`;
+    $('out').innerHTML = html;
+    $('status').textContent = '';
+  } catch (e) {
+    try { await db.exec('ROLLBACK'); } catch {}
+    const parts = [`ERROR: ${e.message}`];
+    if (e.detail) parts.push(`DETAIL: ${e.detail}`);
+    if (e.hint) parts.push(`HINT: ${e.hint}`);
+    if (e.position) parts.push(`позиция в запросе: ${e.position}`);
+    $('out').innerHTML = `<div class="err">${esc(parts.join('\n'))}</div>`;
+    $('status').textContent = '';
+  }
+  const look = TASKS[current].look;
+  $('look').innerHTML = look;
+  $('look').hidden = !look;
+  busy = false;
+  $('run').disabled = false;
+}
+$('run').addEventListener('click', run);
+$('sql').addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+});
+
+async function boot() {
+  $('run').disabled = true;
+  $('reset').disabled = true;
+  $('schema').textContent = 'загружаю PostgreSQL (≈3 МБ)…';
+  try {
+    const { PGlite, types } = await import('https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.5.9/dist/index.js');
+    if (db) await db.close();
+    const keepText = (v) => v;
+    db = await PGlite.create({ parsers: { [types.DATE]: keepText, [types.TIMESTAMPTZ]: keepText, [types.TIMESTAMP]: keepText } });
+    $('schema').textContent = 'генерирую данные парка…';
+    await db.exec(SEED);
+    const v = (await db.query('SELECT version() AS v')).rows[0].v.split(' on ')[0];
+    const c = (await db.query(`SELECT (SELECT count(*) FROM parks) p, (SELECT count(*) FROM drivers) d,
+                                      (SELECT count(*) FROM trips) t, (SELECT count(*) FROM payouts) pa`)).rows[0];
+    $('schema').innerHTML = `<b>${esc(v)}</b> <span>parks ${c.p}</span><span>drivers ${c.d}</span><span>trips ${c.t}</span><span>payouts ${c.pa}</span>`;
+    $('run').disabled = false;
+    $('reset').disabled = false;
+  } catch (e) {
+    $('schema').textContent = 'PostgreSQL не загрузился: ' + e.message;
+    $('out').innerHTML = `<div class="err">${esc('Не удалось загрузить PGlite с cdn.jsdelivr.net: ' + e.message + '\nТексты задач можно прочитать и без запуска.')}</div>`;
+  }
+}
+$('reset').addEventListener('click', async () => { $('out').innerHTML = ''; $('look').hidden = true; await boot(); });
+
+selectTask(0);
+boot();
+</script>
+</body>
+</html>
