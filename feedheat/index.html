@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Фёдор для FeedHeat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* tastemaker stamp: tokens locked to /sellehome + /laffit (project style lock). Structure rotated vs /laffit: hero-answer → two hypothesis dossiers (tabbed) → message workbench with live counters → funnel diagnostic with what-if sliders → path to 8–10 calls → weekly decision rules → how I worked → contact. Mood: technical. Motion: reveal-on-scroll only, gated by prefers-reduced-motion. Self-critique: show-don't-tell 4, philosophy 4, hierarchy 4, specificity 5, restraint 4, variety 4. */
+:root{
+  --bg:#eff2f6; --surface:#ffffff; --surface-2:#e6eaf0; --ink:#121824; --muted:#5c6675; --line:#d4dae3;
+  --accent:#0d6b4f; --accent-ink:#ffffff; --accent-soft:#dcefe6;
+  --warn:#b7791f; --warn-soft:#fbeed5; --good:#1f7a3a; --good-soft:#dcf2e1; --bad:#a23b3b; --bad-soft:#f6dcdc;
+  --c1:#0d6b4f; --c2:#2f7fb8; --c3:#7b61c9; --c4:#b7791f; --c5:#8a8f99;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  --c1:#3fc99a; --c2:#5aa7e0; --c3:#a08ee6; --c4:#e2a94a; --c5:#6b7280;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --warn:#e2a94a; --warn-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  --c1:#3fc99a; --c2:#5aa7e0; --c3:#a08ee6; --c4:#e2a94a; --c5:#6b7280;
+  color-scheme:dark }
+
+*{box-sizing:border-box;min-width:0}
+html{color-scheme:light dark;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+a{color:var(--accent)}
+.wrap{max-width:1100px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(26px,4.4vw,42px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,2.6vw,27px);font-weight:700}
+h3{font-size:16px;font-weight:500}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+section{padding-block:44px;border-top:1px solid var(--line)}
+section>.wrap{display:grid;gap:20px}
+.lede{max-width:72ch;font-size:17px}
+.hero{padding-block:48px 40px;display:grid;gap:22px}
+.quote{border-left:3px solid var(--accent);padding:6px 16px;color:var(--muted);max-width:70ch}
+.quote b{color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.toc{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+.brief{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.brief{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.brief div{background:var(--surface);border:1px solid var(--line);padding:12px 14px;display:grid;gap:3px}
+.brief b{font-family:var(--display);font-size:15px;font-weight:700;color:var(--accent)}
+.brief span{font-size:13px;color:var(--muted);line-height:1.35}
+
+.tool{background:var(--surface);border:1px solid var(--line)}
+.tool-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.tool-head .eyebrow{color:var(--accent)}
+.tool-head .muted{font-size:13px}
+.note{font-size:13px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);line-height:1.5}
+button{font:inherit;font-size:14px;padding:8px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;border-radius:4px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button.small{font-size:12.5px;padding:4px 9px}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:6px 12px;font-size:13px}
+.seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+textarea{font:inherit;font-size:14px;line-height:1.5;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:10px 12px;border-radius:4px;width:100%;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number]{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:6px 8px;border-radius:4px;width:100%}
+
+/* hypothesis dossiers */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow:auto}
+.tabs button{border:0;border-radius:0;border-bottom:2px solid transparent;padding:12px 18px;font-size:14px;white-space:nowrap;background:transparent}
+.tabs button.on{border-bottom-color:var(--accent);color:var(--accent);font-weight:600}
+.dossier{display:none}
+.dossier.on{display:grid}
+.dossier{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+@media (max-width:900px){.dossier{grid-template-columns:1fr}}
+.dossier .l{padding:18px 20px;border-right:1px solid var(--line);display:grid;gap:16px;align-content:start}
+@media (max-width:900px){.dossier .l{border-right:0;border-bottom:1px solid var(--line)}}
+.dossier .r{padding:18px 20px;display:grid;gap:16px;align-content:start}
+.kv{display:grid;gap:4px}
+.kv .k{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.kv p,.kv li{font-size:14.5px;line-height:1.5}
+.kv ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.persona{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--bg);border:1px solid var(--line);padding:12px 14px}
+.persona .av{width:48px;height:48px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:16px}
+.persona b{display:block;font-size:15px}
+.persona span{font-size:13px;color:var(--muted)}
+.filters{display:grid;gap:6px}
+.filters .row{display:grid;grid-template-columns:110px 1fr;gap:10px;font-size:13.5px;padding:6px 0;border-bottom:1px dotted var(--line)}
+.filters .row:last-child{border-bottom:0}
+.filters .row span:first-child{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 7px;border-radius:3px;background:var(--surface-2);margin:2px 3px 2px 0}
+.tag.x{background:var(--bad-soft);color:var(--bad);text-decoration:line-through}
+.bool{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:var(--bg);border:1px solid var(--line);padding:10px 12px;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+
+/* workbench */
+.wb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:900px){.wb{grid-template-columns:1fr}}
+.wb>div{padding:18px 20px;display:grid;gap:12px;align-content:start}
+.wb>div:first-child{border-right:1px solid var(--line)}
+@media (max-width:900px){.wb>div:first-child{border-right:0;border-bottom:1px solid var(--line)}}
+.counter{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px;color:var(--muted)}
+.counter b{font-family:var(--mono);font-weight:500;font-size:13px}
+.counter b.over{color:var(--bad)}
+.counter b.ok{color:var(--good)}
+.meter{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);transition:width .2s ease-out}
+.meter i.over{background:var(--bad)}
+.why{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding:4px 12px;line-height:1.5}
+.flags{display:flex;flex-wrap:wrap;gap:6px;min-height:22px}
+.flag{font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:999px;background:var(--warn-soft);color:var(--warn)}
+.flag.ok{background:var(--good-soft);color:var(--good)}
+.msg-en{white-space:pre-wrap;font-size:14.5px;line-height:1.55;background:var(--bg);border:1px solid var(--line);padding:12px 14px}
+
+/* funnel */
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.r,th.r{text-align:right}
+.tablewrap{overflow:auto}
+.pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.funnels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.funnels{grid-template-columns:1fr}}
+.fn{background:var(--surface);border:1px solid var(--line);display:grid}
+.fn .h{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.fn .h b{font-family:var(--display);font-size:15px}
+.fn .stage{display:grid;grid-template-columns:118px 1fr 52px;gap:8px;align-items:center;padding:7px 16px;font-size:13px;border-bottom:1px dotted var(--line)}
+.fn .stage:last-of-type{border-bottom:0}
+.fn .stage .bar{height:16px;background:var(--surface-2);overflow:hidden;position:relative}
+.fn .stage .bar i{display:block;height:100%;background:var(--c2);transition:width .3s ease-out}
+.fn .stage.weak .bar i{background:var(--bad)}
+.fn .stage.weak{background:var(--bad-soft)}
+.fn .stage .v{font-family:var(--mono);font-size:12.5px;text-align:right}
+.fn .verdict{padding:10px 16px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.45}
+.fn .verdict b{color:var(--bad)}
+.diag{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.diag{grid-template-columns:1fr}}
+.dcard{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:10px;align-content:start}
+.dcard h3{font-size:17px;font-weight:700;color:var(--accent)}
+.dcard p{font-size:14.5px;line-height:1.5}
+.dcard .k{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* what-if */
+.whatif{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){.whatif{grid-template-columns:1fr}}
+.whatif .in{padding:18px 20px;border-right:1px solid var(--line);display:grid;gap:12px;align-content:start}
+@media (max-width:900px){.whatif .in{border-right:0;border-bottom:1px solid var(--line)}}
+.whatif .out{padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sl{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center;font-size:13.5px}
+.sl label{display:grid;gap:4px}
+.sl label span{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.sl label span b{color:var(--ink);font-family:var(--mono);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{border:1px solid var(--line);padding:12px 14px;display:grid;gap:2px;background:var(--bg)}
+.kpi .v{font-family:var(--display);font-size:24px;font-weight:700;color:var(--accent);line-height:1.1}
+.kpi .v.neg{color:var(--bad)}
+.kpi .k{font-size:12px;color:var(--muted);line-height:1.25}
+.hint{font-size:13.5px;padding:10px 12px;border:1px solid var(--line);background:var(--bg);line-height:1.45}
+.hint.good{border-color:var(--good);background:var(--good-soft)}
+.hint.warn{border-color:var(--warn);background:var(--warn-soft)}
+.gauge{display:grid;gap:6px}
+.gauge .track{height:22px;background:var(--surface-2);position:relative;overflow:hidden}
+.gauge .track i{position:absolute;inset:0 auto 0 0;background:var(--accent);transition:width .3s ease-out}
+.gauge .track s{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.5}
+.gauge .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:var(--mono)}
+
+/* rules & timeline */
+.rules{display:grid;border:1px solid var(--line);background:var(--surface)}
+.rule{display:grid;grid-template-columns:170px 1fr 1fr;border-bottom:1px solid var(--line)}
+.rule:last-child{border-bottom:0}
+.rule>div{padding:12px 16px;font-size:14px;line-height:1.45}
+.rule>div:first-child{font-family:var(--mono);font-size:12.5px;color:var(--accent);border-right:1px solid var(--line)}
+.rule>div:nth-child(2){border-right:1px solid var(--line);color:var(--muted)}
+.rule.head>div{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+@media (max-width:760px){.rule{grid-template-columns:1fr}.rule>div{border-right:0!important;border-bottom:1px dotted var(--line)}}
+.tl{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--surface)}
+@media (max-width:860px){.tl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tl div{padding:14px 14px;border-right:1px solid var(--line);display:grid;gap:4px;align-content:start}
+.tl div:last-child{border-right:0}
+@media (max-width:860px){.tl div{border-bottom:1px solid var(--line)}}
+.tl .d{font-family:var(--display);font-weight:700;font-size:13px;color:var(--accent)}
+.tl b{font-size:14px;font-weight:600}
+.tl p{font-size:13px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.col{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:10px;align-content:start}
+.col h3{color:var(--accent)}
+.col ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14.5px}
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.contact code{font-family:var(--mono);font-size:15px;background:var(--surface);border:1px solid var(--line);padding:8px 12px}
+
+@media (prefers-reduced-motion:no-preference){
+  [data-reveal]{opacity:0;transform:translateY(12px);transition:opacity .45s ease-out,transform .45s ease-out}
+  [data-reveal].in{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <p class="eyebrow">Тестовое задание SDR · FeedHeat · ответ Фёдора Поплавского · 27.10.2026</p>
+  <h1>Две гипотезы для Reconly, разбор трёх кампаний и калькулятор пути к 8–10 звонкам в месяц</h1>
+  <p class="lede">Это та же работа, что в Google-документе, только с живыми инструментами: счётчик символов для connection note, воронки трёх кампаний с автоматическим поиском узкого места и ползунки «что будет, если поднять reply rate». Цифры можно менять, страница ничего никуда не отправляет.</p>
+  <div class="brief">
+    <div><b>Reconly</b><span>сверка счетов и платежей; QuickBooks, Xero, NetSuite; от $800/мес</span></div>
+    <div><b>50–500 человек</b><span>e-commerce, агентства, SaaS с своей финансовой командой; США и Великобритания</span></div>
+    <div><b>2–4 дня</b><span>уходит у финотдела на ручную сверку в Excel в конце каждого месяца</span></div>
+    <div><b>8–10 звонков</b><span>с финансовыми руководителями в месяц — цель клиента</span></div>
+  </div>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#hyp">1. Гипотезы и ICP</a><a href="#wb">2. Сообщения</a><a href="#funnel">3. Диагностика кампаний</a><a href="#whatif">4. Что если</a><a href="#path">5. Путь к 8–10 звонкам</a><a href="#rules">6. Еженедельный разбор</a><a href="#how">7. Как я работал</a>
+  </nav>
+</header>
+
+<section id="hyp">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Часть 1</p>
+    <h2>Две гипотезы: кто, зачем сейчас и что обсуждаем на звонке</h2>
+    <p class="lede">Гипотезы различаются не формулировкой, а человеком: в первой пишем тому, кто закрывает месяц руками, во второй — тому, кто выбирает, чем его закрывать. Разные боли, разные офферы, разный тон.</p>
+    <div class="tool">
+      <div class="tabs" role="tablist">
+        <button type="button" class="on" role="tab" aria-selected="true" data-tab="h1">Гипотеза 1 · Контролёр в e-commerce</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="h2">Гипотеза 2 · VP Finance в SaaS на NetSuite</button>
+      </div>
+
+      <div class="dossier on" id="tab-h1">
+        <div class="l">
+          <div class="persona"><div class="av">S</div><div><b>Sarah, Controller</b><span>DTC-бренд, 50–200 человек, США · QuickBooks Online + Shopify, Amazon, Stripe, PayPal</span></div></div>
+          <div class="kv"><span class="k">Сегмент</span><p>Контролёр, финансовый менеджер или Head of Finance в e-commerce-компании на 50–200 сотрудников. США в первую очередь, Великобритания во вторую. Несколько источников выплат, у каждого свои комиссии, возвраты и задержки.</p></div>
+          <div class="kv"><span class="k">Задача покупателя и почему сейчас</span><p>Закрывает месяц своими руками и хочет сократить его с 4–5 дней до 1–2, перестав быть узким местом для отчётности. Сейчас — потому что впереди пик Q4: транзакций в 2–3 раза больше, затем годовое закрытие и аудит, а второго бухгалтера под сезон не дадут.</p></div>
+          <div class="kv"><span class="k">Оффер на звонок</span><p>20-минутный разбор его закрытия: он называет источники выплат и систему учёта, мы показываем, какая часть сверки уйдёт в автомат, и считаем дни, которые он сэкономит в Q4. Кейс агентства (5 дней → 2) — как ориентир.</p></div>
+        </div>
+        <div class="r">
+          <div class="kv"><span class="k">ICP-фильтры · человек</span>
+            <div class="filters">
+              <div class="row"><span>должность</span><span><i class="tag">Controller</i><i class="tag">Assistant Controller</i><i class="tag">Finance Manager</i><i class="tag">Head of Finance</i><i class="tag">Director of Finance</i><i class="tag">Accounting Manager</i><i class="tag">VP Finance (до 100 чел.)</i></span></div>
+              <div class="row"><span>seniority</span><span><i class="tag">Manager</i><i class="tag">Director</i><i class="tag">VP</i></span></div>
+              <div class="row"><span>география</span><span><i class="tag">United States</i><i class="tag">United Kingdom</i></span></div>
+              <div class="row"><span>сигнал</span><span>в роли 3–18 месяцев — новые люди меняют процессы</span></div>
+            </div>
+          </div>
+          <div class="kv"><span class="k">ICP-фильтры · компания</span>
+            <div class="filters">
+              <div class="row"><span>размер</span><span><i class="tag">51–200</i></span></div>
+              <div class="row"><span>индустрия</span><span><i class="tag">Retail</i><i class="tag">Consumer Goods</i><i class="tag">Internet / E-commerce</i><i class="tag">Food &amp; Beverages (DTC)</i></span></div>
+              <div class="row"><span>ключевые слова</span><span><i class="tag">Shopify</i><i class="tag">Amazon</i><i class="tag">DTC</i><i class="tag">ecommerce</i><i class="tag">Stripe</i><i class="tag">QuickBooks</i><i class="tag">Xero</i><i class="tag">marketplace</i></span></div>
+              <div class="row"><span>сигнал</span><span>вакансии с «month-end close», «reconciliation», «QuickBooks» — боль уже признана</span></div>
+            </div>
+          </div>
+          <div class="kv"><span class="k">Кого исключаю</span>
+            <p><i class="tag x">бухгалтерские фирмы и fractional CFO</i><i class="tag x">до 50 человек</i><i class="tag x">более 500 / NetSuite + BlackLine</i><i class="tag x">сотрудники BlackLine, FloQast, интеграторов</i><i class="tag x">рекрутеры, студенты, open to work</i><i class="tag x">Индия, Филиппины, ЮВА</i></p>
+          </div>
+          <div class="kv"><span class="k">Строка для Sales Navigator (черновик)</span>
+<pre class="bool">Title: ("Controller" OR "Assistant Controller" OR "Finance Manager" OR "Head of Finance" OR "Director of Finance" OR "Accounting Manager") NOT ("Credit Controller" OR "Document Controller" OR "Bookkeeper")
+Geography: United States, United Kingdom · Company headcount: 51–200
+Industry: Retail, Consumer Goods, Internet · Keywords: Shopify OR Amazon OR DTC OR ecommerce
+Exclude: Accounting, Outsourcing, Staffing &amp; Recruiting</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="dossier" id="tab-h2">
+        <div class="l">
+          <div class="persona"><div class="av">J</div><div><b>James, VP Finance</b><span>B2B SaaS или агентство, 150–500 человек, США/UK · NetSuite, команда 3–8 человек</span></div></div>
+          <div class="kv"><span class="k">Сегмент</span><p>VP Finance, Finance Director или CFO в B2B SaaS или digital-агентстве на 150–500 сотрудников. Учёт в NetSuite или переезд на него. Закрытие ведёт контролёр, но инструмент выбирает этот человек.</p></div>
+          <div class="kv"><span class="k">Задача покупателя и почему сейчас</span><p>Построить закрытие, которое выдержит аудит и рост, не покупая enterprise-систему. Триггеры, которые видны в LinkedIn: новый CFO или VP Finance в первые 90 дней; раунд, due diligence или первый аудит; переезд на NetSuite, при котором заново решают, чем сверять.</p></div>
+          <div class="kv"><span class="k">Оффер на звонок</span><p>30 минут «BlackLine против Reconly для компании на 200 человек»: по его списку сверок показываем, какие закрываем так же, какие нет, сколько стоит и за сколько недель запускается. Честное сравнение, включая то, чего у нас нет, — для CFO ценнее демо.</p></div>
+        </div>
+        <div class="r">
+          <div class="kv"><span class="k">ICP-фильтры · человек</span>
+            <div class="filters">
+              <div class="row"><span>должность</span><span><i class="tag">CFO</i><i class="tag">VP Finance</i><i class="tag">Finance Director</i><i class="tag">Head of Finance</i><i class="tag">Director of Accounting</i><i class="tag">Controller (150–250 чел.)</i></span></div>
+              <div class="row"><span>seniority</span><span><i class="tag">Director</i><i class="tag">VP</i><i class="tag">CXO</i></span></div>
+              <div class="row"><span>география</span><span><i class="tag">United States</i><i class="tag">United Kingdom</i></span></div>
+              <div class="row"><span>сигнал</span><span>в роли меньше 6 месяцев; обсуждает NetSuite, close, audit; подписан на BlackLine, FloQast, NetSuite</span></div>
+            </div>
+          </div>
+          <div class="kv"><span class="k">ICP-фильтры · компания</span>
+            <div class="filters">
+              <div class="row"><span>размер</span><span><i class="tag">151–500</i></span></div>
+              <div class="row"><span>индустрия</span><span><i class="tag">Software / SaaS</i><i class="tag">Information Technology</i><i class="tag">Marketing &amp; Advertising</i><i class="tag">Design</i></span></div>
+              <div class="row"><span>ключевые слова</span><span><i class="tag">NetSuite</i><i class="tag">SaaS</i><i class="tag">ARR</i><i class="tag">subscription</i><i class="tag">Series A/B/C</i><i class="tag">agency</i></span></div>
+              <div class="row"><span>сигнал</span><span>NetSuite в вакансиях («NetSuite Administrator») или в стеке компании</span></div>
+            </div>
+          </div>
+          <div class="kv"><span class="k">Кого исключаю</span>
+            <p><i class="tag x">уже на BlackLine, FloQast, Trintech</i><i class="tag x">публичные и 500+</i><i class="tag x">финтех, банки, страховые, крипто</i><i class="tag x">fractional CFO, консультанты, инвесторы</i><i class="tag x">Head of FP&amp;A и казначеи без close</i></p>
+          </div>
+          <div class="kv"><span class="k">Строка для Sales Navigator (черновик)</span>
+<pre class="bool">Title: ("CFO" OR "Chief Financial Officer" OR "VP Finance" OR "VP of Finance" OR "Finance Director" OR "Head of Finance" OR "Director of Accounting") NOT ("Fractional" OR "Interim" OR "Advisor")
+Geography: United States, United Kingdom · Company headcount: 201–500 (+ 51–200 для агентств)
+Industry: Software Development, IT Services, Advertising Services · Keywords: NetSuite OR SaaS OR ARR
+Changed jobs: last 90 days · Exclude: Financial Services, Banking, Insurance</pre>
+          </div>
+        </div>
+      </div>
+      <p class="note"><b>Какую запускаю первой — гипотезу 1.</b> Повод (лайк под постом о закрытии месяца) лучше всего совпадает с человеком, который закрывает месяц своими руками; у e-commerce больше всего транзакций на доллар выручки, так что ценность видна в первом сообщении; ICP проверяется по открытым признакам (Shopify, QuickBooks в стеке), а цикл сделки на QuickBooks/Xero короче, чем на NetSuite. Гипотезу 2 запускаю через две недели, когда будет видно, сколько звонков даёт первая.</p>
+    </div>
+  </div>
+</section>
+
+<section id="wb">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Часть 1 · сообщения</p>
+    <h2>Connection note и первое сообщение — на английском, со счётчиком</h2>
+    <p class="lede">Повод один для обеих гипотез: человек лайкнул мой комментарий под постом о закрытии месяца. Note можно редактировать прямо здесь: счётчик следит за лимитом 300 символов, а проверка подсвечивает слова, по которым сообщение выглядит как рассылка.</p>
+    <div class="tool">
+      <div class="tool-head"><p class="eyebrow">Рабочее место</p><span class="seg" role="group" aria-label="Гипотеза"><button type="button" id="wbH1" class="on">Гипотеза 1 · Sarah</button><button type="button" id="wbH2">Гипотеза 2 · James</button></span></div>
+      <div class="wb">
+        <div>
+          <div class="kv"><span class="k">Connection note · лимит 300 символов</span></div>
+          <textarea id="noteTa" rows="5" aria-label="Connection note"></textarea>
+          <div class="counter"><span>Символов (LinkedIn считает каждый, включая пробелы)</span><b id="noteCnt">0 / 300</b></div>
+          <div class="meter"><i id="noteMeter" style="width:0%"></i></div>
+          <div class="flags" id="noteFlags"></div>
+          <div class="why" id="noteWhy"></div>
+        </div>
+        <div>
+          <div class="kv"><span class="k">Первое сообщение после принятия инвайта</span></div>
+          <div class="msg-en" id="msg1"></div>
+          <div class="counter"><span>Символов · слов · абзацев</span><b id="msg1Cnt"></b></div>
+          <div class="why" id="msg1Why"></div>
+        </div>
+      </div>
+      <p class="note">Проверка на «рассылочность» ищет обороты, которые получатели видят по десять раз в день: «I hope this finds you well», «quick call», «I'd love to», «synergy», «leverage», «touch base», «circle back», «game-changer», восклицательные знаки и больше одной ссылки. Это не фильтр истины, а напоминание перечитать текст глазами адресата.</p>
+    </div>
+    <div class="tl">
+      <div><span class="d">День 0</span><b>Комментарий под постом</b><p>про закрытие месяца, у автора с нужной аудиторией</p></div>
+      <div><span class="d">День 0–1</span><b>Лайк → note</b><p>до 300 символов: повод, один вопрос, без продукта</p></div>
+      <div><span class="d">Принял</span><b>Сообщение 1</b><p>в течение суток: повод → боль → продукт одной строкой → лёгкий шаг</p></div>
+      <div><span class="d">+3–4 дня</span><b>Сообщение 2</b><p>одна строка с вопросом или полезная цифра; без «just following up»</p></div>
+      <div><span class="d">+10 дней</span><b>Сообщение 3</b><p>последнее: «если не сейчас — к какому месяцу вернуться?»</p></div>
+      <div><span class="d">Ответил</span><b>Переписка → слот</b><p>два варианта времени, ссылка на календарь клиента, подтверждение за день</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="funnel">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Часть 2</p>
+    <h2>Три кампании за 30 дней: где узкое место у каждой</h2>
+    <p class="lede">Таблица из задания, досчитанная до конверсий между этапами. Красным отмечен этап, который сильнее всего отстаёт от моих рабочих порогов для тёплого аутрича по лайкам: приняли 60–75 %, ответили 15–25 % от принявших, позитивных 40–60 % от ответивших, звонок у 50–70 % позитивных. Это ориентиры, а не стандарт отрасли; на живых аккаунтах они уточняются за две недели.</p>
+    <div class="funnels" id="funnels"></div>
+    <div class="tool">
+      <div class="tool-head"><p class="eyebrow">Сводная таблица</p><p class="muted">Последние две колонки — главное: сколько звонков даёт каждая сотня инвайтов и каждая тысяча вовлечённых.</p></div>
+      <div class="tablewrap"><table id="cmpTbl"><thead><tr><th>Кампания</th><th class="r">Вовлечены</th><th class="r">ICP</th><th class="r">Инвайты</th><th class="r">Приняли</th><th class="r">Ответили</th><th class="r">Позитив</th><th class="r">Звонки</th><th class="r">Звонков / 100 инвайтов</th><th class="r">Звонков / 1000 вовлечённых</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="diag">
+      <div class="dcard">
+        <h3>Кампания A</h3>
+        <p class="k">Где проблема</p>
+        <p>В первом сообщении после принятия инвайта. Принимают отлично (76 %, лучший показатель), но отвечают 4,8 % — в четыре-пять раз ниже, чем в B и C. Людям нравится note, а дальше они получают текст, на который нечего ответить. Второй сигнал — 50 % «прошли ICP» при 820 вовлечённых: пост собрал широкую аудиторию, фильтр пропускает людей, которые подходят по должности, но боли не чувствуют; отсюда 3 позитивных из 11.</p>
+        <p class="k">Что меняю первым</p>
+        <p>Переписываю первое сообщение по схеме «повод → одна боль → один вопрос, на который легко ответить», без описания продукта, и добавляю второе касание через 3–4 дня. А/Б на следующих 100 принявших, цель — 15 % ответов. 217 принявшим, которые молчат, уходит короткий follow-up: 30–40 ответов без единого нового инвайта. Параллельно сужаю ICP ключевыми словами по стеку, чтобы «прошли ICP» упало до 25–30 %.</p>
+      </div>
+      <div class="dcard">
+        <h3>Кампания B</h3>
+        <p class="k">Где проблема</p>
+        <p>В источнике сигнала. Из 900 вовлечённых ICP прошли 63 (7 %): комментарии стоят под постами не для нашей аудитории — у популярного автора не из финансов или на общую тему. Зато те, кто прошёл, работают лучше всех: 22 % ответов, 6 позитивных из 9, 3 звонка из 6. Машина исправна, ей не хватает топлива: 60 инвайтов за месяц — два в день при лимите LinkedIn около 100–150 в неделю.</p>
+        <p class="k">Что меняю первым</p>
+        <p>Меняю, где и под чем комментируем: посты fractional CFO, партнёров QuickBooks/Xero/NetSuite, авторов про close и аудит, посты BlackLine и FloQast и их клиентов; темы узкие — month-end close, reconciliation, NetSuite. Цель — не больше вовлечённых, а 300–400 прошедших ICP при той же конверсии. Второй шаг — проверить сам фильтр: не режет ли он тех, кого в кампании C пропускает.</p>
+      </div>
+      <div class="dcard">
+        <h3>Кампания C</h3>
+        <p class="k">Где проблема</p>
+        <p>В объёме. Это лучшая кампания: 4 звонка с 80 инвайтов, 61 % ICP, 23 % ответов, 7 позитивных из 12. Проблема одна — 140 вовлечённых за месяц: источник узкий, под него не хватает постов или комментариев. Приняли 65 % — чуть ниже A; для более старшей аудитории нормально, но +10 п. п. к приёму дают ещё 1–2 звонка.</p>
+        <p class="k">Что меняю первым</p>
+        <p>Масштабирую источник, не трогая то, что работает: ещё 5–8 авторов и тем с той же аудиторией (прошлые посты тех же авторов, похожие авторы, обсуждения конкурентов), комментариев в неделю в 2–3 раза больше. ICP, сообщения и последовательность фиксирую как эталон для остальных кампаний. Отдельно тестирую вторую версию note на 50 человек, чтобы поднять приём с 65 до 75 %.</p>
+      </div>
+    </div>
+    <div class="hint good"><b>Следующую неделю трачу на кампанию C.</b> Она даёт 28,6 звонка на 1000 вовлечённых против 3,3 у B и 1,2 у A, и её узкое место — объём — исправляется просто работой там, где уже работает. Чтобы выйти на 8–10 звонков в месяц, C нужно удвоить-утроить вход (300–400 вовлечённых): реалистично за неделю. Исправленные сообщения A и новые источники B — задачи на две-три недели с проверкой гипотез. Единственное, что делаю в A параллельно, — follow-up 217 молчащим принявшим: полчаса работы и, судя по B и C, ещё 1–2 звонка.</div>
+  </div>
+</section>
+
+<section id="whatif">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Что если</p>
+    <h2>Ползунки: какой этап двигает звонки сильнее всего</h2>
+    <p class="lede">Берём любую кампанию, двигаем одну конверсию и смотрим, сколько звонков получится за месяц. Так проверяется, что менять первым: у A одна правка сообщения даёт больше, чем любой другой этап, у C — только вход.</p>
+    <div class="tool">
+      <div class="tool-head"><p class="eyebrow">Модель воронки</p><span class="seg" role="group" aria-label="Кампания"><button type="button" data-wf="A">A</button><button type="button" data-wf="B">B</button><button type="button" data-wf="C" class="on">C</button></span></div>
+      <div class="whatif">
+        <div class="in">
+          <div class="sl"><label><span>Вовлечены за месяц <b id="vEng"></b></span><input type="range" id="sEng" min="50" max="1500" step="10"></label><input type="number" id="nEng" min="0" aria-label="вовлечены"></div>
+          <div class="sl"><label><span>Прошли ICP <b id="vIcp"></b></span><input type="range" id="sIcp" min="1" max="100" step="1"></label><input type="number" id="nIcp" min="0" max="100" aria-label="ICP %"></div>
+          <div class="sl"><label><span>Инвайтов отправлено (от ICP) <b id="vInv"></b></span><input type="range" id="sInv" min="10" max="100" step="1"></label><input type="number" id="nInv" min="0" max="100" aria-label="инвайты %"></div>
+          <div class="sl"><label><span>Приняли <b id="vAcc"></b></span><input type="range" id="sAcc" min="10" max="100" step="1"></label><input type="number" id="nAcc" min="0" max="100" aria-label="приняли %"></div>
+          <div class="sl"><label><span>Ответили (от принявших) <b id="vRep"></b></span><input type="range" id="sRep" min="1" max="60" step="0.5"></label><input type="number" id="nRep" min="0" max="100" step="0.5" aria-label="ответили %"></div>
+          <div class="sl"><label><span>Позитивных (от ответивших) <b id="vPos"></b></span><input type="range" id="sPos" min="5" max="100" step="1"></label><input type="number" id="nPos" min="0" max="100" aria-label="позитив %"></div>
+          <div class="sl"><label><span>Звонок (от позитивных) <b id="vCal"></b></span><input type="range" id="sCal" min="5" max="100" step="1"></label><input type="number" id="nCal" min="0" max="100" aria-label="звонок %"></div>
+          <div class="btns"><button type="button" class="small" data-preset="A-fix">A: reply 15 %, ICP 30 %</button><button type="button" class="small" data-preset="B-src">B: ICP 40 % при 900</button><button type="button" class="small" data-preset="C-x25">C: вход ×2,5</button><button type="button" class="small" id="wfReset">Сбросить к факту</button></div>
+        </div>
+        <div class="out">
+          <div class="kpis">
+            <div class="kpi"><div class="v num" id="kCalls">0</div><div class="k">звонков в месяц</div></div>
+            <div class="kpi"><div class="v num" id="kInv">0</div><div class="k">инвайтов в месяц</div></div>
+            <div class="kpi"><div class="v num" id="kPer100">0</div><div class="k">звонков на 100 инвайтов</div></div>
+            <div class="kpi"><div class="v num" id="kDelta">0</div><div class="k">к факту кампании</div></div>
+            <div class="kpi"><div class="v num" id="kWeek">0</div><div class="k">инвайтов в неделю (лимит LinkedIn ~100–150)</div></div>
+            <div class="kpi"><div class="v num" id="kReplies">0</div><div class="k">ответов в месяц, которые надо вести до звонка</div></div>
+          </div>
+          <div class="gauge">
+            <div class="track"><i id="gBar" style="width:0%"></i><s style="left:80%"></s><s style="left:100%"></s></div>
+            <div class="lbl"><span>0</span><span>цель 8</span><span>10 звонков</span></div>
+          </div>
+          <div id="wfHint" class="hint"></div>
+          <div class="kv"><span class="k">Чувствительность: +5 п. п. к одному этапу даёт звонков</span><div id="sens" class="filters"></div></div>
+        </div>
+      </div>
+      <p class="note">Модель простая: звонки = вовлечены × ICP × инвайты × приняли × ответили × позитивных × звонок. Она не учитывает, что при росте объёма конверсии обычно чуть падают, и не знает, сколько инвайтов аккаунт может отправить без риска. Поэтому рядом показан недельный объём: если он выше 150, нужен второй аккаунт или неделя больше, а не ползунок.</p>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">План</p>
+    <h2>Путь к 8–10 звонкам в месяц: что делаю в первые две недели</h2>
+    <div class="cols">
+      <div class="col"><h3>Неделя 1 · кампания C ×2,5</h3><ul>
+        <li>Список из 8–10 авторов и тем, где собирается аудитория C: прошлые посты тех же авторов, похожие авторы, посты BlackLine, FloQast, NetSuite и их клиентов.</li>
+        <li>Комментариев в 2–3 раза больше, в те же дни и часы, где были лайки; каждый комментарий — с мнением, а не «great post».</li>
+        <li>ICP, note и сообщения C не трогаю; их же беру эталоном для A и B.</li>
+        <li>Follow-up 217 молчащим принявшим в A: одна строка с вопросом.</li>
+        <li>В пятницу — таблица: вовлечено, ICP, инвайты, приняли, ответы по дням.</li>
+      </ul></div>
+      <div class="col"><h3>Неделя 2 · чиним A, пересобираем B</h3><ul>
+        <li>A: два варианта первого сообщения по 50 принявших, второе касание через 3–4 дня; смотрю reply rate и долю позитивных, а не только ответы.</li>
+        <li>A: ключевые слова по стеку в ICP; цель — «прошли ICP» 25–30 % и позитивных 40 %+.</li>
+        <li>B: новые источники под финансовую аудиторию; проверяю, что фильтр B не строже фильтра C.</li>
+        <li>Гипотеза 2 для Reconly (VP Finance на NetSuite) — запуск, если C стабильно даёт 6+ звонков.</li>
+      </ul></div>
+      <div class="col"><h3>Каждый день · ответы и звонки</h3><ul>
+        <li>Ответы разбираю утром по МСК и вечером под США: позитив — два слота, вопрос — ответ по существу, «не сейчас» — дата возврата в CRM.</li>
+        <li>Звонок подтверждаю за день, клиенту отправляю карточку: кто, компания, что сказал, что болит.</li>
+        <li>Каждый отказ помечаю причиной: цена, нет боли, уже есть инструмент, не тот человек. Это сырьё для правки ICP и офферов.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Еженедельный разбор</p>
+    <h2>Правила: по какой метрике что меняю</h2>
+    <p class="lede">Чтобы каждую неделю не спорить «ощущениями», решение привязано к этапу, который отстаёт. Один этап — одна правка — одна неделя на проверку.</p>
+    <div class="rules">
+      <div class="rule head"><div>Если</div><div>Что это значит</div><div>Что меняю</div></div>
+      <div class="rule"><div>ICP &lt; 30 % от вовлечённых</div><div>Сигнал не там: посты собирают не нашу аудиторию</div><div>Источники: другие авторы и темы. Не трогаю сообщения.</div></div>
+      <div class="rule"><div>Приняли &lt; 60 %</div><div>Note или профиль: не ясно, кто пишет и зачем</div><div>Note: повод и вопрос; профиль клиента: заголовок, фото, баннер, последние посты.</div></div>
+      <div class="rule"><div>Ответили &lt; 12 %</div><div>Первое сообщение не даёт повода ответить</div><div>Сообщение 1: вопрос вместо презентации; второе касание через 3–4 дня.</div></div>
+      <div class="rule"><div>Позитивных &lt; 40 % от ответов</div><div>Пишем не тем или не про то: ICP слишком широкий или оффер мимо боли</div><div>ICP: сужаю ключевыми словами; оффер: другая боль сегмента.</div></div>
+      <div class="rule"><div>Звонок &lt; 50 % от позитивных</div><div>Теряем людей между «интересно» и календарём</div><div>Слоты в первом же ответе, ссылка на календарь, напоминание за день, передача клиенту в тот же день.</div></div>
+      <div class="rule"><div>Всё в норме, звонков мало</div><div>Воронка исправна, мало входа</div><div>Объём: больше комментариев, второй источник сигнала, вторая гипотеза.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Честно</p>
+    <h2>Как я работал и что готов разобрать на собеседовании</h2>
+    <div class="cols">
+      <div class="col"><h3>Время</h3><ul><li>Около полутора часов на разбор задачи и черновики, ещё столько же на цифры и эту страницу.</li><li>Google-документ по условиям задания — основной ответ; страница — тот же текст плюс инструменты.</li></ul></div>
+      <div class="col"><h3>Инструменты</h3><ul><li>Черновики сообщений и расчёт конверсий делал в паре с Claude; формулировки гипотез, ICP, исключения и выводы по кампаниям — мои.</li><li>Английский в сообщениях проверял на читаемость и на длину note: 202 и 220 символов из 300.</li></ul></div>
+      <div class="col"><h3>Что бы спросил у клиента</h3><ul><li>Какая доля текущих клиентов Reconly на QuickBooks/Xero против NetSuite — от этого зависит, какую гипотезу усиливать.</li><li>Есть ли в CRM причины отказов по кампании A: это быстрее любого А/Б.</li><li>Сколько аккаунтов LinkedIn можно задействовать: лимит инвайтов — потолок для C.</li></ul></div>
+    </div>
+    <div class="contact">
+      <code>Фёдор Поплавский</code><code>Telegram @Feodor_Russkiy</code><a href="https://github.com/dobrewoks1">github.com/dobrewoks1</a><span class="muted">· на связи весь день по МСК и в вечерние часы США</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const fmt=(n,d=0)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:d,minimumFractionDigits:d}).format(n);
+  const pct=(n,d=0)=>fmt(n*100,d)+' %';
+
+  /* tabs */
+  $$('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+    $$('.tabs button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b)});
+    $$('.dossier').forEach(d=>d.classList.toggle('on',d.id==='tab-'+b.dataset.tab));
+  }));
+
+  /* workbench */
+  const H={
+    h1:{note:"Hi Sarah, thanks for the like on my month-end comment. Curious how your close looks with Shopify and Amazon payouts in the mix — still matching them by hand in Excel? Happy to connect and compare notes.",
+      noteWhy:"Назван повод (лайк), один вопрос по его боли, без продукта и без просьбы о звонке. «Shopify» и «Amazon» сразу показывают, что я знаю, чем его закрытие отличается от закрытия в агентстве.",
+      msg:"Thanks for connecting, Sarah. Since you reacted to the month-end thread: Controllers at DTC brands keep telling me the same two things eat their close — matching Shopify, Amazon and Stripe payouts to orders, and fees that never line up with the statements.\n\nThat's what we built Reconly for. It plugs into QuickBooks or Xero and clears about 80% of that matching on its own. A 120-person agency went from a 5-day close to 2.\n\nNot asking for a demo. If you tell me how many payout sources you reconcile each month, I can show you in 20 minutes what would still be manual on your side — and what wouldn't. Worth a look before Q4 volume hits?",
+      msgWhy:"Первая фраза возвращает к поводу, вторая называет две конкретные боли сегмента, третья — продукт и кейс без прилагательных, четвёртая — лёгкий шаг с вопросом, на который отвечают одной цифрой. «Not asking for a demo» снимает защиту."},
+    h2:{note:"Hi James, thanks for the like on my month-end comment. I talk with finance leads at 150–500-person SaaS companies about running close on NetSuite without a BlackLine-size budget — would be glad to connect and swap notes.",
+      noteWhy:"Для CFO уровень разговора — обмен опытом между равными, не вопрос про Excel. BlackLine назван сразу: это их ориентир по цене, и «без бюджета BlackLine» — главное, что нас отличает.",
+      msg:"Thanks for connecting, James. One question, since you reacted to the month-end post: when reconciliation tools last came up on your side, did BlackLine fall over on price or on implementation time?\n\nThat's the pattern I hear from most VPs of Finance at 150–500-person SaaS companies. Reconly sits in that gap: it connects to NetSuite, takes about 80% of the manual reconciliation off the team, and goes live in weeks, not quarters. Pricing starts at $800 a month, so it's a line item, not a project.\n\nIf a 30-minute walk-through of where it covers BlackLine's use cases — and where it doesn't — would be useful before your next close, I'll send over a couple of slots.",
+      msgWhy:"Открываю вопросом с двумя вариантами ответа — на такой отвечают чаще, чем на «интересно?». Цена названа сразу: для CFO это квалификация, а не отпугивание. «И где не покрывает» — обещание честного разговора, что для этого уровня и есть оффер."}
+  };
+  const SPAM=[/i hope this (finds|message finds) you/i,/quick call/i,/i'?d love to/i,/synergy/i,/leverag/i,/touch base/i,/circle back/i,/game[- ]changer/i,/cutting[- ]edge/i,/just following up/i,/hope you'?re doing well/i,/!/, /https?:\/\/[^\s]+\s+[\s\S]*https?:\/\//i];
+  const SPAMN=["«I hope this finds you well»","«quick call»","«I'd love to»","«synergy»","«leverage»","«touch base»","«circle back»","«game-changer»","«cutting-edge»","«just following up»","«hope you're doing well»","восклицательный знак","больше одной ссылки"];
+  const ta=$('#noteTa'); let cur='h1';
+  function loadWb(k){cur=k;ta.value=H[k].note;$('#noteWhy').textContent=H[k].noteWhy;$('#msg1').textContent=H[k].msg;$('#msg1Why').textContent=H[k].msgWhy;
+    const m=H[k].msg;$('#msg1Cnt').textContent=`${fmt(m.length)} · ${fmt(m.trim().split(/\s+/).length)} · ${m.split(/\n\s*\n/).length}`;
+    $('#wbH1').classList.toggle('on',k==='h1');$('#wbH2').classList.toggle('on',k==='h2');countNote();}
+  function countNote(){const v=ta.value,n=[...v].length,over=n>300;$('#noteCnt').textContent=`${fmt(n)} / 300`;$('#noteCnt').className=over?'over':'ok';
+    const mt=$('#noteMeter');mt.style.width=Math.min(100,n/3)+'%';mt.className=over?'over':'';
+    const fl=$('#noteFlags');fl.innerHTML='';let hits=0;SPAM.forEach((re,i)=>{if(re.test(v)){hits++;const s=document.createElement('span');s.className='flag';s.textContent=SPAMN[i];fl.appendChild(s)}});
+    if(!v.trim().toLowerCase().includes('thanks for the like')&&!/like|reacted|comment/i.test(v)){hits++;const s=document.createElement('span');s.className='flag';s.textContent='нет повода (лайк, комментарий)';fl.appendChild(s)}
+    if(!/\?/.test(v)){hits++;const s=document.createElement('span');s.className='flag';s.textContent='нет вопроса';fl.appendChild(s)}
+    if(over){const s=document.createElement('span');s.className='flag';s.textContent='длиннее 300 — LinkedIn обрежет';fl.appendChild(s)}
+    if(!hits&&!over){const s=document.createElement('span');s.className='flag ok';s.textContent='повод есть, вопрос есть, штампов нет';fl.appendChild(s)}}
+  ta.addEventListener('input',countNote);$('#wbH1').addEventListener('click',()=>loadWb('h1'));$('#wbH2').addEventListener('click',()=>loadWb('h2'));loadWb('h1');
+
+  /* funnel data */
+  const C={A:{eng:820,icp:410,inv:300,acc:228,rep:11,pos:3,cal:1},B:{eng:900,icp:63,inv:60,acc:41,rep:9,pos:6,cal:3},C:{eng:140,icp:85,inv:80,acc:52,rep:12,pos:7,cal:4}};
+  const TH={icp:[.3,.5],acc:[.6,.75],rep:[.12,.2],pos:[.4,.6],cal:[.5,.7]};
+  const NAMES={icp:'прошли ICP',acc:'приняли',rep:'ответили',pos:'позитивных',cal:'звонок'};
+  function rates(c){return{icp:c.icp/c.eng,inv:c.inv/c.icp,acc:c.acc/c.inv,rep:c.rep/c.acc,pos:c.pos/c.rep,cal:c.cal/c.pos}}
+  function grade(k,v){const[lo,hi]=TH[k];return v<lo?'bad':v<hi?'warn':'good'}
+  function weakest(c){const r=rates(c);let w=null,ws=1;for(const k of Object.keys(TH)){const[lo]=TH[k];const s=r[k]/lo;if(s<ws){ws=s;w=k}}return ws<1?w:null}
+  const VERD={A:'Reply rate 4,8 % при лучшем приёме — <b>первое сообщение</b> не даёт повода ответить. Второй сигнал: 50 % ICP на 820 вовлечённых — аудитория поста широкая.',B:'Только 7 % вовлечённых проходят ICP — <b>источник сигнала</b> не там. Всё ниже работает лучше всех трёх.',C:'Все этапы в норме, звонков 4: узкое место — <b>объём</b>, 140 вовлечённых в месяц.'};
+  const fw=$('#funnels');
+  for(const [k,c] of Object.entries(C)){const r=rates(c),w=weakest(c);const stages=[['Вовлечены',c.eng,null,null],['Прошли ICP',c.icp,r.icp,'icp'],['Инвайтов',c.inv,r.inv,null],['Приняли',c.acc,r.acc,'acc'],['Ответили',c.rep,r.rep,'rep'],['Позитивных',c.pos,r.pos,'pos'],['Звонки',c.cal,r.cal,'cal']];
+    const d=document.createElement('div');d.className='fn';d.innerHTML=`<div class="h"><b>Кампания ${k}</b><span class="pill ${w?'bad':'good'}">${w?'слабое звено: '+NAMES[w]:'все этапы в норме'}</span></div>`+
+      stages.map(([n,v,rt,key])=>`<div class="stage${key&&key===w?' weak':''}"><span>${n}</span><span class="bar"><i style="width:${Math.max(2,v/c.eng*100)}%"></i></span><span class="v">${fmt(v)}${rt!=null?'<br><span class="muted">'+pct(rt,rt<.1?1:0)+'</span>':''}</span></div>`).join('')+
+      `<div class="verdict">${VERD[k]}</div>`;fw.appendChild(d)}
+  const tb=$('#cmpTbl tbody');
+  for(const [k,c] of Object.entries(C)){const r=rates(c);const cell=(v,key,d=0)=>`<td class="r num">${fmt(v)} <span class="pill ${grade(key,r[key])}">${pct(r[key],d)}</span></td>`;
+    tb.insertAdjacentHTML('beforeend',`<tr><td><b>${k}</b></td><td class="r num">${fmt(c.eng)}</td>${cell(c.icp,'icp')}<td class="r num">${fmt(c.inv)}</td>${cell(c.acc,'acc')}${cell(c.rep,'rep',1)}${cell(c.pos,'pos')}${cell(c.cal,'cal')}<td class="r num"><b>${fmt(c.cal/c.inv*100,1)}</b></td><td class="r num"><b>${fmt(c.cal/c.eng*1000,1)}</b></td></tr>`)}
+
+  /* what-if */
+  let wf='C';const S={};
+  const ids={eng:['sEng','nEng',1],icp:['sIcp','nIcp',100],inv:['sInv','nInv',100],acc:['sAcc','nAcc',100],rep:['sRep','nRep',100],pos:['sPos','nPos',100],cal:['sCal','nCal',100]};
+  function setFrom(c){const r=rates(c);S.eng=c.eng;S.icp=r.icp;S.inv=r.inv;S.acc=r.acc;S.rep=r.rep;S.pos=r.pos;S.cal=r.cal;paint()}
+  function calls(s){return s.eng*s.icp*s.inv*s.acc*s.rep*s.pos*s.cal}
+  function paint(){for(const [k,[sid,nid,m]] of Object.entries(ids)){const v=k==='eng'?S[k]:S[k]*m;$('#'+sid).value=v;$('#'+nid).value=k==='eng'?Math.round(v):Math.round(v*10)/10;
+      $('#v'+k[0].toUpperCase()+k.slice(1)).textContent=k==='eng'?fmt(v):fmt(v,k==='rep'?1:0)+' %'}
+    const n=calls(S),inv=S.eng*S.icp*S.inv,fact=C[wf].cal,rep=S.eng*S.icp*S.inv*S.acc*S.rep;
+    $('#kCalls').textContent=fmt(n,1);$('#kInv').textContent=fmt(inv);$('#kPer100').textContent=inv?fmt(n/inv*100,1):'0';
+    const d=n-fact;$('#kDelta').textContent=(d>=0?'+':'')+fmt(d,1);$('#kDelta').className='v num'+(d<0?' neg':'');
+    const wk=inv/4.3;$('#kWeek').textContent=fmt(wk);$('#kWeek').className='v num'+(wk>150?' neg':'');$('#kReplies').textContent=fmt(rep);
+    $('#gBar').style.width=Math.min(100,n/10*100)+'%';
+    const h=$('#wfHint');if(n>=8){h.className='hint good';h.textContent=`Цель клиента достигнута: ${fmt(n,1)} звонков в месяц${wk>150?', но '+fmt(wk)+' инвайтов в неделю выше безопасного лимита одного аккаунта — нужен второй аккаунт или больше недель':''}.`}
+    else{h.className='hint warn';h.textContent=`До цели 8 не хватает ${fmt(8-n,1)}. ${sensText()}`}
+    const sd=$('#sens');sd.innerHTML='';for(const k of ['icp','acc','rep','pos','cal']){const s2={...S};s2[k]=Math.min(1,S[k]+.05);const dd=calls(s2)-n;sd.insertAdjacentHTML('beforeend',`<div class="row"><span>${NAMES[k]}</span><span><span class="bar" style="display:inline-block;width:${Math.min(160,dd*40)}px;height:8px;background:var(--accent);vertical-align:middle;margin-right:8px"></span>+${fmt(dd,2)}</span></div>`)}
+    const s3={...S};s3.eng=S.eng*1.5;sd.insertAdjacentHTML('beforeend',`<div class="row"><span>вход ×1,5</span><span><span class="bar" style="display:inline-block;width:${Math.min(160,(calls(s3)-n)*40)}px;height:8px;background:var(--c2);vertical-align:middle;margin-right:8px"></span>+${fmt(calls(s3)-n,2)}</span></div>`)}
+  function sensText(){let best=null,bv=0;for(const k of ['icp','acc','rep','pos','cal']){const s2={...S};s2[k]=Math.min(1,S[k]+.05);const dd=calls(s2)-calls(S);if(dd>bv){bv=dd;best=k}}return `Сильнее всего сейчас двигает этап «${NAMES[best]}»: +5 п. п. дают +${fmt(bv,1)} звонка.`}
+  for(const [k,[sid,nid,m]] of Object.entries(ids)){$('#'+sid).addEventListener('input',e=>{S[k]=k==='eng'?+e.target.value:+e.target.value/m;paint()});$('#'+nid).addEventListener('input',e=>{const v=+e.target.value;if(!isFinite(v))return;S[k]=k==='eng'?v:v/m;paint()})}
+  $$('[data-wf]').forEach(b=>b.addEventListener('click',()=>{wf=b.dataset.wf;$$('[data-wf]').forEach(x=>x.classList.toggle('on',x===b));setFrom(C[wf])}));
+  $('#wfReset').addEventListener('click',()=>setFrom(C[wf]));
+  $$('[data-preset]').forEach(b=>b.addEventListener('click',()=>{const p=b.dataset.preset;
+    if(p==='A-fix'){wf='A';setFrom(C.A);S.rep=.15;S.icp=.30;S.inv=.73;S.pos=.45}
+    if(p==='B-src'){wf='B';setFrom(C.B);S.icp=.40;S.inv=.6}
+    if(p==='C-x25'){wf='C';setFrom(C.C);S.eng=350}
+    $$('[data-wf]').forEach(x=>x.classList.toggle('on',x.dataset.wf===wf));paint()}));
+  setFrom(C.C);
+
+  /* reveal */
+  if(matchMedia('(prefers-reduced-motion: no-preference)').matches&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});$$('[data-reveal]').forEach(el=>io.observe(el))}else{$$('[data-reveal]').forEach(el=>el.classList.add('in'))}
+})();
+</script>
+</body>
+</html>
