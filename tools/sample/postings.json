@@ -1,0 +1,35 @@
+{
+  "result": {
+    "postings": [
+      {"posting_number": "0123456-0051-1", "status": "awaiting_deliver", "in_process_at": "2026-10-26T09:10:00Z", "shipment_date": "2026-10-27T11:30:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 1, "price": "1890"}]},
+      {"posting_number": "0123456-0052-1", "status": "awaiting_packaging", "in_process_at": "2026-10-26T15:40:00Z", "shipment_date": "2026-10-27T15:40:00Z",
+       "products": [{"offer_id": "OF-1032", "name": "Масляный фильтр", "quantity": 2, "price": "590"}]},
+      {"posting_number": "0123456-0053-1", "status": "awaiting_packaging", "in_process_at": "2026-10-27T03:05:00Z", "shipment_date": "2026-10-28T03:05:00Z",
+       "products": [{"offer_id": "HB-5522", "name": "Ступичный подшипник", "quantity": 1, "price": "1490"}]},
+      {"posting_number": "0123456-0040-1", "status": "delivering", "in_process_at": "2026-10-20T08:00:00Z", "shipment_date": "2026-10-21T08:00:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 1, "price": "1890"}]},
+      {"posting_number": "0123456-0041-1", "status": "delivering", "in_process_at": "2026-10-21T10:00:00Z", "shipment_date": "2026-10-22T10:00:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 2, "price": "1890"}]},
+      {"posting_number": "0123456-0042-1", "status": "delivered", "in_process_at": "2026-10-21T12:00:00Z", "shipment_date": "2026-10-22T12:00:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 1, "price": "1890"}]},
+      {"posting_number": "0123456-0043-1", "status": "delivering", "in_process_at": "2026-10-22T09:00:00Z", "shipment_date": "2026-10-23T09:00:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 1, "price": "1890"}]},
+      {"posting_number": "0123456-0044-1", "status": "delivering", "in_process_at": "2026-10-23T09:00:00Z", "shipment_date": "2026-10-24T09:00:00Z",
+       "products": [{"offer_id": "SP1409", "name": "Колодки тормозные передние Sangsin SP1409", "quantity": 1, "price": "1890"}]},
+      {"posting_number": "0123456-0045-1", "status": "delivering", "in_process_at": "2026-10-24T09:00:00Z", "shipment_date": "2026-10-25T09:00:00Z",
+       "products": [{"offer_id": "ABS-77", "name": "Датчик ABS", "quantity": 1, "price": "1290"}]},
+      {"posting_number": "0123456-0046-1", "status": "delivering", "in_process_at": "2026-10-24T13:00:00Z", "shipment_date": "2026-10-25T13:00:00Z",
+       "products": [{"offer_id": "ABS-77", "name": "Датчик ABS", "quantity": 1, "price": "1290"}, {"offer_id": "CF-220", "name": "Фильтр салона угольный", "quantity": 1, "price": "690"}]},
+      {"posting_number": "0123456-0047-1", "status": "delivering", "in_process_at": "2026-10-25T07:00:00Z", "shipment_date": "2026-10-26T07:00:00Z",
+       "products": [{"offer_id": "ABS-77", "name": "Датчик ABS", "quantity": 2, "price": "1290"}]},
+      {"posting_number": "0123456-0048-1", "status": "delivering", "in_process_at": "2026-10-25T16:00:00Z", "shipment_date": "2026-10-26T16:00:00Z",
+       "products": [{"offer_id": "OF-1032", "name": "Масляный фильтр", "quantity": 3, "price": "590"}]},
+      {"posting_number": "0123456-0049-1", "status": "delivering", "in_process_at": "2026-10-26T06:00:00Z", "shipment_date": "2026-10-27T06:00:00Z",
+       "products": [{"offer_id": "SA-2211", "name": "Амортизатор задний", "quantity": 2, "price": "3490"}]},
+      {"posting_number": "0123456-0050-1", "status": "cancelled", "in_process_at": "2026-10-26T07:00:00Z", "shipment_date": "2026-10-27T07:00:00Z",
+       "products": [{"offer_id": "SL-308", "name": "Стойка стабилизатора", "quantity": 1, "price": "890"}]}
+    ],
+    "has_next": false
+  }
+}

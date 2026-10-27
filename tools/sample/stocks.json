@@ -1,0 +1,14 @@
+{
+  "items": [
+    {"offer_id": "SP1409", "product_id": 1001, "stocks": [{"type": "fbs", "present": 6, "reserved": 1}]},
+    {"offer_id": "OF-1032", "product_id": 1002, "stocks": [{"type": "fbs", "present": 40, "reserved": 2}]},
+    {"offer_id": "CF-220", "product_id": 1003, "stocks": [{"type": "fbs", "present": 25, "reserved": 0}]},
+    {"offer_id": "HB-5522", "product_id": 1004, "stocks": [{"type": "fbs", "present": 9, "reserved": 1}]},
+    {"offer_id": "ABS-77", "product_id": 1005, "stocks": [{"type": "fbs", "present": 3, "reserved": 0}]},
+    {"offer_id": "SA-2211", "product_id": 1006, "stocks": [{"type": "fbs", "present": 12, "reserved": 0}]},
+    {"offer_id": "SL-308", "product_id": 1007, "stocks": [{"type": "fbs", "present": 30, "reserved": 0}]},
+    {"offer_id": "TK-900", "product_id": 1008, "stocks": [{"type": "fbs", "present": 4, "reserved": 0}]}
+  ],
+  "cursor": "",
+  "total": 8
+}

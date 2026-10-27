@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Фёдор для ЛАФФИТ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* tastemaker stamp: same tokens as /sellehome (project style lock); structure rotated: hero-answer → three working tools (each its own layout) → fact sheet → day timeline → proof → plan → contact. Mood: technical. Motion: reveal-on-scroll only, gated by prefers-reduced-motion. */
+:root{
+  --bg:#eff2f6; --surface:#ffffff; --surface-2:#e6eaf0; --ink:#121824; --muted:#5c6675; --line:#d4dae3;
+  --accent:#0d6b4f; --accent-ink:#ffffff; --accent-soft:#dcefe6;
+  --cny:#b7791f; --cny-soft:#fbeed5; --good:#1f7a3a; --good-soft:#dcf2e1; --bad:#a23b3b; --bad-soft:#f6dcdc;
+  --c1:#0d6b4f; --c2:#2f7fb8; --c3:#7b61c9; --c4:#b7791f; --c5:#8a8f99; --c6:#c25e5e; --c7:#4a9d8f;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --cny:#e2a94a; --cny-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  --c1:#3fc99a; --c2:#5aa7e0; --c3:#a08ee6; --c4:#e2a94a; --c5:#6b7280; --c6:#e07a7a; --c7:#6fc7b8;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#171e29; --surface-2:#1f2836; --ink:#e8ecf2; --muted:#9aa5b5; --line:#2c3645;
+  --accent:#3fc99a; --accent-ink:#0b1a14; --accent-soft:#163428;
+  --cny:#e2a94a; --cny-soft:#3a2d14; --good:#5ccf7c; --good-soft:#173722; --bad:#e07a7a; --bad-soft:#3d1c1c;
+  --c1:#3fc99a; --c2:#5aa7e0; --c3:#a08ee6; --c4:#e2a94a; --c5:#6b7280; --c6:#e07a7a; --c7:#6fc7b8;
+  color-scheme:dark }
+
+*{box-sizing:border-box;min-width:0}
+html{color-scheme:light dark;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+a{color:var(--accent)}
+.wrap{max-width:1100px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(26px,4.4vw,42px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,2.6vw,27px);font-weight:700}
+h3{font-size:16px;font-weight:500}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+section{padding-block:44px;border-top:1px solid var(--line)}
+section>.wrap{display:grid;gap:20px}
+.lede{max-width:70ch;font-size:17px}
+small.src{display:block;font-size:12.5px;color:var(--muted);line-height:1.45}
+
+.hero{padding-block:48px 40px;display:grid;gap:22px}
+.quote{border-left:3px solid var(--accent);padding:6px 16px;color:var(--muted);max-width:70ch;font-style:italic}
+.quote b{color:var(--ink);font-style:normal;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.toc{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+
+.tool{background:var(--surface);border:1px solid var(--line)}
+.tool-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.tool-head .eyebrow{color:var(--accent)}
+.tool-head .muted{font-size:13px}
+.note{font-size:13px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);line-height:1.5}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+label.f span b{color:var(--ink);font-weight:500}
+input[type=text],input[type=number],input[type=date],select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);padding:7px 9px;border-radius:4px;min-width:0;width:100%}
+textarea{font-family:var(--mono);font-size:13px;line-height:1.45;resize:vertical}
+button{font:inherit;font-size:14px;padding:8px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;border-radius:4px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button.small{font-size:12.5px;padding:4px 9px}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible,tr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:6px 12px;font-size:13px}
+.seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.inputs{padding:18px 20px;border-right:1px solid var(--line);display:grid;gap:14px;align-content:start}
+@media (max-width:900px){.inputs{border-right:0;border-bottom:1px solid var(--line)}}
+.inputs .grp{display:grid;gap:10px}
+.inputs .grp>.eyebrow{font-size:11px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.result{padding:18px 20px;display:grid;gap:16px;align-content:start;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{border:1px solid var(--line);padding:12px 14px;display:grid;gap:2px;background:var(--bg)}
+.kpi .v{font-family:var(--display);font-size:22px;font-weight:700;color:var(--accent);line-height:1.1}
+.kpi .v.cny{color:var(--cny)}
+.kpi .v.neg{color:var(--bad)}
+.kpi .k{font-size:12px;color:var(--muted);line-height:1.25}
+.wf{display:grid;gap:8px}
+.wfbar{display:flex;height:34px;border:1px solid var(--line);overflow:hidden;background:var(--surface-2)}
+.wfbar i{display:block;height:100%;min-width:0;transition:width .25s ease-out}
+.wfbar i.m{background:var(--good)}
+.wfbar i.neg{background:var(--bad)}
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;font-size:13.5px;margin:0}
+@media (max-width:560px){.legend{grid-template-columns:1fr}}
+.legend div{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px dotted var(--line);padding:3px 0}
+.legend .sw{display:inline-block;width:10px;height:10px;margin-right:8px;vertical-align:middle;border-radius:2px}
+.legend b{font-weight:500;font-family:var(--mono);font-size:13px}
+.hint{font-size:13.5px;padding:10px 12px;border:1px solid var(--line);background:var(--bg);line-height:1.45}
+.hint.warn{border-color:var(--cny);background:var(--cny-soft)}
+.hint.good{border-color:var(--good);background:var(--good-soft)}
+.hint.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--surface);z-index:1}
+td.r,th.r{text-align:right}
+.tablewrap{overflow:auto;max-height:520px}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover{background:var(--surface-2)}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--cny-soft);color:var(--cny)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.k{background:var(--accent-soft);color:var(--accent)}
+.bar{display:inline-block;width:64px;height:6px;background:var(--surface-2);vertical-align:middle;margin-right:8px;border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.bar i.neg{background:var(--bad)}
+
+/* reconciliation */
+.recon{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+@media (max-width:900px){.recon{grid-template-columns:1fr}}
+.recon .left{border-right:1px solid var(--line);min-width:0}
+@media (max-width:900px){.recon .left{border-right:0;border-bottom:1px solid var(--line)}}
+.toolbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:14px 20px;border-bottom:1px solid var(--line)}
+@media (max-width:900px){.toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.panel{padding:18px 20px;display:grid;gap:14px;align-content:start;min-width:0}
+.panel h3{font-size:17px;font-weight:700}
+.diff{display:grid;gap:0;border:1px solid var(--line);font-size:14px}
+.diff div{display:grid;grid-template-columns:1fr auto;gap:12px;padding:8px 12px;border-bottom:1px solid var(--line);align-items:baseline}
+.diff div:last-child{border-bottom:0}
+.diff div.total{background:var(--bg);font-weight:600}
+.diff .mono{font-family:var(--mono);font-size:13px}
+.diff .ok{color:var(--good)}
+.diff .no{color:var(--bad)}
+.msg{white-space:pre-wrap;font-size:13.5px;background:var(--bg);border:1px solid var(--line);padding:12px 14px;line-height:1.5;font-family:var(--mono);overflow-wrap:anywhere}
+.drop{padding:14px 20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13.5px}
+.drop input[type=file]{font-size:13px}
+
+/* card checker */
+.card-tool{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){.card-tool{grid-template-columns:1fr}}
+.card-tool .form{padding:18px 20px;border-right:1px solid var(--line);display:grid;gap:12px;align-content:start}
+@media (max-width:900px){.card-tool .form{border-right:0;border-bottom:1px solid var(--line)}}
+.card-tool .out{padding:18px 20px;display:grid;gap:14px;align-content:start;min-width:0}
+.preview{border:1px solid var(--line);background:var(--bg);padding:14px;display:grid;gap:6px}
+.preview .t{font-weight:600;font-size:16px;line-height:1.3}
+.preview .m{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.checks{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:14px;line-height:1.4;padding:6px 10px;border:1px solid var(--line);background:var(--surface)}
+.checks li .i{font-family:var(--mono);font-weight:600;text-align:center}
+.checks li.ok .i{color:var(--good)}
+.checks li.warn{border-color:var(--cny)}
+.checks li.warn .i{color:var(--cny)}
+.checks li.bad{border-color:var(--bad)}
+.checks li.bad .i{color:var(--bad)}
+.score{display:flex;align-items:center;gap:12px}
+.score .big{font-family:var(--display);font-size:30px;font-weight:700;color:var(--accent)}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.facts{grid-template-columns:1fr}}
+.fact{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.fact .big{font-family:var(--display);font-size:22px;font-weight:700;color:var(--accent);line-height:1.15}
+.fact .big.cny{color:var(--cny)}
+.fact p{font-size:14px}
+.fact .s{font-size:12px;color:var(--muted)}
+
+/* day */
+.day{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.day{grid-template-columns:1fr}}
+.tl{background:var(--surface);border:1px solid var(--line);display:grid}
+.tl>.h{padding:12px 18px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.slot{display:grid;grid-template-columns:92px 1fr;border-bottom:1px solid var(--line)}
+.slot:last-child{border-bottom:0}
+.slot .d{font-family:var(--display);font-weight:700;padding:14px 12px 14px 18px;border-right:1px solid var(--line);color:var(--accent);font-size:13px;line-height:1.3}
+.slot .t{padding:14px 16px;display:grid;gap:4px}
+.slot .t b{font-weight:600;font-size:15px}
+.slot .t p{color:var(--muted);font-size:14px}
+pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--surface);border:1px solid var(--line);padding:14px;overflow-x:auto}
+
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.col{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:10px;align-content:start}
+.col h3{color:var(--accent)}
+.col ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:15px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.proof{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:8px;align-content:start}
+.card .big{font-family:var(--display);font-size:28px;font-weight:700;color:var(--accent);line-height:1}
+.card .stack{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.steps{display:grid;border:1px solid var(--line);background:var(--surface)}
+.step{display:grid;grid-template-columns:92px 1fr;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .d{font-family:var(--display);font-weight:700;padding:16px;border-right:1px solid var(--line);color:var(--accent);font-size:14px}
+.step .t{padding:16px;display:grid;gap:4px}
+.step .t p{color:var(--muted);font-size:15px}
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.contact code{font-family:var(--mono);font-size:15px;background:var(--surface);border:1px solid var(--line);padding:8px 12px}
+
+@media (prefers-reduced-motion:no-preference){
+  [data-reveal]{opacity:0;transform:translateY(12px);transition:opacity .45s ease-out,transform .45s ease-out}
+  [data-reveal].in{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <p class="eyebrow">Ответ Марии · вакансия «Менеджер по маркетплейсам» · ООО «ЛАФФИТ» · 27.10.2026</p>
+  <h1>Опыта с китайскими кабинетами у меня нет. Вот что я сделал за один час, чтобы это не было проблемой.</h1>
+  <p class="quote">Ваш вопрос: <b>«Подскажите, пожалуйста, есть ли у вас опыт работы именно с китайскими аккаунтами FBS / FBP?»</b></p>
+  <p class="lede">Мария, честный ответ: кабинеты Ozon Global и WB China от лица китайского продавца я не вёл. Вместо того чтобы описывать, как быстро я учусь, я разобрал ваш функционал по пунктам и собрал под каждый рабочий инструмент: юнит-экономика realFBS против FBP с порогами комиссий, сверка отчёта площадки с выплатой в CNY, проверка карточки автозапчасти и план рабочего дня на 2–3 часа. Всё ниже работает прямо на странице, цифры можно менять на ваши.</p>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#unit">1. Юнит-экономика</a><a href="#recon">2. Сверка с выплатой в CNY</a><a href="#card">3. Карточка запчасти</a><a href="#facts">4. Что выяснил</a><a href="#day">5. Рабочий день</a><a href="#proof">6. Чем подтверждаю</a>
+  </nav>
+  <div class="chips">
+    <span class="chip">Excel · Google Таблицы · формулы, сводные</span><span class="chip">Python · SQLite</span><span class="chip">Ozon Seller API</span><span class="chip">Claude Code · Codex</span><span class="chip">английский B1, китайский через переводчик</span>
+  </div>
+</header>
+
+<section id="unit">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Инструмент 1</p>
+    <h2>Юнит-экономика одной запчасти: закупка в CNY, продажа в ₽, выплата в CNY</h2>
+    <p class="lede">Считает, что остаётся после комиссии по ценовому порогу, сбора за отправление, доставки по объёмному весу, комиссии платёжного провайдера, невыкупов и рекламы. Переключите realFBS на FBP и посмотрите, где схема даёт больше. Тарифы в полях — мои допущения по открытым источникам, в кабинете подставляются ваши.</p>
+    <div class="tool">
+      <div class="tool-head"><p class="eyebrow">Калькулятор</p><p class="muted">Полоса ниже: из чего складывается цена покупателя. Зелёное справа: маржа.</p></div>
+      <div class="calc">
+        <div class="inputs">
+          <div class="grp"><p class="eyebrow">Товар</p>
+            <label class="f"><span>Название (для таблицы)</span><input type="text" id="uName" value="Тормозные колодки передние, комплект"></label>
+            <div class="g2">
+              <label class="f"><span>Закупка в Китае, <b>CNY</b></span><input type="number" id="uBuy" value="85" min="0" step="1"></label>
+              <label class="f"><span>Упаковка и обработка, <b>CNY</b></span><input type="number" id="uPack" value="6" min="0" step="0.5"></label>
+            </div>
+            <div class="g2">
+              <label class="f"><span>Вес, кг</span><input type="number" id="uW" value="0.9" min="0" step="0.05"></label>
+              <label class="f"><span>Габариты, см (Д×Ш×В)</span><div class="g3"><input type="number" id="uL" value="22" min="0" aria-label="длина"><input type="number" id="uWd" value="16" min="0" aria-label="ширина"><input type="number" id="uH" value="8" min="0" aria-label="высота"></div></label>
+            </div>
+          </div>
+          <div class="grp"><p class="eyebrow">Цена и схема</p>
+            <div class="g2">
+              <label class="f"><span>Цена на Ozon Global, <b>₽</b></span><input type="number" id="uPrice" value="2190" min="0" step="10"></label>
+              <label class="f"><span>Схема</span><span class="seg" role="group" aria-label="Схема"><button type="button" id="sRfbs" class="on">realFBS</button><button type="button" id="sFbp">FBP</button></span></label>
+            </div>
+            <label class="f"><span>Комиссия realFBS по порогам цены, % (до 1500 ₽ · до 5000 ₽ · свыше)</span><div class="g3"><input type="number" id="uT1" value="11" step="0.25" aria-label="до 1500"><input type="number" id="uT2" value="12" step="0.25" aria-label="до 5000"><input type="number" id="uT3" value="13" step="0.25" aria-label="свыше 5000"></div></label>
+            <div class="g2">
+              <label class="f"><span>FBP ниже на, п.п.</span><input type="number" id="uFbpD" value="1" step="0.25"></label>
+              <label class="f"><span>Курс CNY → ₽ (ЦБ на дату)</span><input type="number" id="uRate" value="11.3" step="0.01" min="0.01"></label>
+            </div>
+          </div>
+          <div class="grp"><p class="eyebrow">Логистика и удержания</p>
+            <div class="g2">
+              <label class="f"><span>Доставка покупателю, ₽ за кг (физ. или объёмный)</span><input type="number" id="uShip" value="380" min="0" step="10"></label>
+              <label class="f"><span>Сбор Ozon за отправление, % (15–200 ₽)</span><input type="number" id="uFee" value="2" min="0" step="0.5"></label>
+            </div>
+            <div class="g3">
+              <label class="f"><span>Провайдер выплат, %</span><input type="number" id="uPay" value="1.2" min="0" step="0.1"></label>
+              <label class="f"><span>Невыкупы и возвраты, %</span><input type="number" id="uRet" value="5" min="0" step="0.5"></label>
+              <label class="f"><span>Цена одного невыкупа, ₽</span><input type="number" id="uRetCost" value="350" min="0" step="10"></label>
+            </div>
+            <label class="f"><span>Реклама, % от цены</span><input type="number" id="uAds" value="3" min="0" step="0.5"></label>
+          </div>
+        </div>
+        <div class="result">
+          <div class="kpis">
+            <div class="kpi"><div class="v num" id="kMargin">0 ₽</div><div class="k">маржа с одной продажи</div></div>
+            <div class="kpi"><div class="v num cny" id="kMarginCny">0 ¥</div><div class="k">то же в CNY: так это увидит китайский продавец в выплате</div></div>
+            <div class="kpi"><div class="v num" id="kPct">0 %</div><div class="k">маржа от цены покупателя</div></div>
+            <div class="kpi"><div class="v num" id="kBreak">0 ₽</div><div class="k">цена безубыточности</div></div>
+            <div class="kpi"><div class="v num" id="kTarget">0 ₽</div><div class="k">цена для маржи 20 %</div></div>
+            <div class="kpi"><div class="v num" id="kComm">0 %</div><div class="k" id="kCommK">комиссия по порогу</div></div>
+          </div>
+          <div class="wf">
+            <div class="wfbar" id="wfbar" aria-hidden="true"></div>
+            <dl class="legend" id="legend"></dl>
+          </div>
+          <div id="hints" style="display:grid;gap:8px"></div>
+        </div>
+      </div>
+      <p class="note">Комиссия берётся по трём ценовым порогам (до 1500 ₽, до 5000 ₽, свыше), по FBP обычно на 1 п.п. ниже. Сбор за отправление: 2 % от цены, не меньше 15 ₽ и не больше 200 ₽ (тариф с 04.05.2026). Доставка считается по большему из физического и объёмного веса (Д×Ш×В / 5000: уточняю коэффициент у перевозчика). Выплата встаёт в очередь после статуса «Доставлен», провайдер LianLian берёт 1,2 %. Ставки по категории «Автозапчасти» в открытых таблицах не нашёл, поэтому в полях условные 11–13 %: первым делом в кабинете беру реальные.</p>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head"><p class="eyebrow">Та же формула на восьми SKU</p><p class="muted">Нажмите строку: товар подставится в калькулятор. Закупочные цены и веса условные, для демонстрации логики.</p></div>
+      <div class="tablewrap">
+        <table id="skuTbl">
+          <thead><tr><th>Запчасть</th><th class="r">Закупка, ¥</th><th class="r">Вес, кг</th><th class="r">Цена, ₽</th><th class="r">Комиссия</th><th class="r">Маржа, ₽</th><th>Маржа, %</th><th>Что делать</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="note">В реальной работе эта таблица живёт в Google Таблицах: закупка и остатки подтягиваются из файла фулфилмента, курс ЦБ по формуле, продажи и комиссии из отчётов кабинета. Раз в неделю смотрю на столбец «что делать» и снимаю или поднимаю цены.</p>
+    </div>
+  </div>
+</section>
+
+<section id="recon">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Инструмент 2</p>
+    <h2>Сверка отчёта площадки с выплатой в CNY</h2>
+    <p class="lede">Самая частая ошибка при сверке: сложить все заказы отчёта и ждать эту сумму на счёт. Выплата считается только по заказам со статусом «Доставлен» на дату закрытия периода, из неё вычтены возвраты после доставки и комиссия провайдера, а курс берётся на дату платежа, а не на дату продажи. Ниже образец отчёта за вторую половину октября; каждый заказ помечен, почему он вошёл или не вошёл в выплату. Можно загрузить свой CSV: он разбирается в браузере и никуда не отправляется.</p>
+    <div class="tool">
+      <div class="toolbar">
+        <label class="f"><span>Период с</span><input type="date" id="rFrom" value="2026-10-16"></label>
+        <label class="f"><span>по</span><input type="date" id="rTo" value="2026-10-31"></label>
+        <label class="f"><span>Курс на дату выплаты, ₽ за ¥</span><input type="number" id="rRate" value="11.34" step="0.01"></label>
+        <label class="f"><span>Провайдер, %</span><input type="number" id="rPay" value="1.2" step="0.1"></label>
+        <label class="f"><span>Пришло на счёт, <b>¥</b></span><input type="number" id="rGot" step="0.01"></label>
+      </div>
+      <div class="recon">
+        <div class="left">
+          <div class="tablewrap">
+            <table id="rTbl">
+              <thead><tr><th>Отправление</th><th>Заказ</th><th>Статус</th><th class="r">Цена, ₽</th><th class="r">Комиссия</th><th class="r">Сбор</th><th class="r">Доставка</th><th class="r">К выплате</th><th>В выплату?</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Разбор разницы</h3>
+          <div class="diff" id="diff"></div>
+          <div id="rVerdict" class="hint"></div>
+          <details><summary style="cursor:pointer;font-size:14px">Черновик обращения в поддержку, если остаток не объясняется</summary><div class="msg" id="ticket" style="margin-top:8px"></div></details>
+        </div>
+      </div>
+      <div class="drop">
+        <label>Свой отчёт (CSV, разделитель «;» или «,»): <input type="file" id="rFile" accept=".csv,text/csv"></label>
+        <button type="button" class="small" id="rDemo">Вернуть образец</button>
+        <span class="muted" id="rFileNote">Колонки нахожу по названиям: отправление, статус, дата, цена, комиссия, логистика. Чего нет, считаю по формулам калькулятора.</span>
+      </div>
+      <p class="note">Что ещё держу в голове при сверке: три документа до 5-го числа (отчёт о реализации, акт выполненных работ, отчёт для валютных платежей), квартальный акт сверки с 15 рабочими днями на возражения, иначе принимается автоматически; реквизиты меняются только в окне с 26-го числа; порог выплаты 6 500 ¥. В календаре у меня это стоит напоминаниями.</p>
+    </div>
+  </div>
+</section>
+
+<section id="card">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Инструмент 3</p>
+    <h2>Карточка автозапчасти: проверка перед загрузкой</h2>
+    <p class="lede">У вас премия за корректность карточек, а для покупателя запчасть без применимости и кросс-номеров заканчивается возвратом. Заполните поля: справа соберётся название по шаблону и список замечаний. Тот же чек-лист прогоняю скриптом по всему каталогу перед массовой загрузкой.</p>
+    <div class="tool">
+      <div class="card-tool">
+        <div class="form">
+          <div class="g2">
+            <label class="f"><span>Тип детали</span><input type="text" id="cType" value="Колодки тормозные передние"></label>
+            <label class="f"><span>Бренд</span><input type="text" id="cBrand" value="Sangsin"></label>
+          </div>
+          <div class="g2">
+            <label class="f"><span>Артикул производителя</span><input type="text" id="cSku" value="SP1409"></label>
+            <label class="f"><span>OEM / кросс-номера (через запятую)</span><input type="text" id="cOem" value="58101-2SA20, 58101-2SA00"></label>
+          </div>
+          <label class="f"><span>Применимость: марка, модель, кузов, годы</span><input type="text" id="cFit" value="Hyundai ix35 (LM) 2010–2015, Kia Sportage (SL) 2010–2016"></label>
+          <div class="g3">
+            <label class="f"><span>Вес, г</span><input type="number" id="cWg" value="900" min="0"></label>
+            <label class="f"><span>Фото, шт</span><input type="number" id="cPhotos" value="5" min="0"></label>
+            <label class="f"><span>Цена, ₽</span><input type="number" id="cPrice" value="2190" min="0"></label>
+          </div>
+          <label class="f"><span>Описание</span><textarea id="cDesc" rows="5">Комплект передних тормозных колодок Sangsin SP1409 на Hyundai ix35 и Kia Sportage 2010–2016. Низкометаллическая смесь, противошумные пластины в комплекте. Перед заказом сверьте номер по VIN: на часть комплектаций ставятся колодки 58101-2SA00. В комплекте 4 колодки, датчик износа не предусмотрен. Отправка со склада в Гуанчжоу, срок доставки указан в карточке.</textarea></label>
+          <div class="btns"><button type="button" class="primary" id="cCheck">Проверить карточку</button><button type="button" id="cBad">Подставить плохой пример</button></div>
+        </div>
+        <div class="out">
+          <div class="score"><div class="big" id="cScore">0</div><div><b>баллов из 100</b><br><span class="muted" style="font-size:13px">порог для загрузки без правок: 80</span></div></div>
+          <div class="preview">
+            <p class="eyebrow">Название по шаблону</p>
+            <p class="t" id="cTitle"></p>
+            <p class="m" id="cMeta"></p>
+          </div>
+          <ul class="checks" id="cList"></ul>
+        </div>
+      </div>
+      <p class="note">Что проверяется: артикул без пробелов и кириллицы; хотя бы один OEM-номер; применимость с годами; вес (без него не посчитать доставку по весу); 3+ фото; описание от 300 знаков с номерами и применимостью; нет слов «оригинал» и «OEM-качество» у неоригинала (риск претензий по бренду); тормозные жидкости, масла, аккумуляторы и аэрозоли подсвечиваю как опасный груз, шины как товар с маркировкой «Честный знак». Ограничения кросс-бордера по категориям сверяю в кабинете, а не по памяти.</p>
+    </div>
+  </div>
+</section>
+
+<section id="facts">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Что выяснил за час</p>
+    <h2>Шпаргалка по Ozon Global и WB China для китайского продавца</h2>
+    <p class="lede">Собрано по открытым источникам 27.10.2026: документация Ozon для Global, обзоры GuruSeller и INSAL, новость Oborot.ru о WB China POP. Это ориентиры, а не тарифы: в первый день в кабинете я сверяю каждую цифру и заменяю её на вашу.</p>
+    <div class="facts">
+      <div class="fact"><div class="big">realFBS · FBP</div><p>realFBS: вы храните, собираете и отправляете сами через партнёрскую логистику. FBP (Fulfillment by Partner): товар заранее лежит на складе партнёра Ozon в Китае, партнёр принимает, хранит, собирает и передаёт в доставку. FBP доступна только продавцам из Китая.</p><p class="s">docs.ozon.ru/global, шаг 4</p></div>
+      <div class="fact"><div class="big">1 500 · 5 000 ₽</div><p>Комиссия зависит от категории и ценового порога: до 1 500 ₽, до 5 000 ₽, свыше. По FBP обычно на 1 п.п. ниже, чем по realFBS. Отсюда правило: цена 1 520 ₽ часто хуже, чем 1 499 ₽.</p><p class="s">GuruSeller, тарифы с 01.12.2025</p></div>
+      <div class="fact"><div class="big">2 % · 15–200 ₽</div><p>Сбор Ozon за каждое отправление с 04.05.2026: 2 % от цены в кабинете, в коридоре от 15 до 200 ₽. Доставку покупателю перевозчик считает по физическому или объёмному весу. Для почтовых методов China Post компенсация 4–6 % от цены.</p><p class="s">GuruSeller</p></div>
+      <div class="fact"><div class="big cny">6 500 ¥</div><p>Порог выплаты при договоре в юанях (1 000 $ или 60 000 ₽ в других валютах). Основной провайдер для КНР и Гонконга LianLian Pay, комиссия 1,2 %. Деньги встают в очередь только после статуса «Доставлен».</p><p class="s">INSAL, GuruSeller</p></div>
+      <div class="fact"><div class="big cny">до 25-го · до 16-го</div><p>Две выплаты в месяц: до 25-го за операции до 16-го, до 16-го следующего месяца за вторую половину. Суммы в USD конвертируются в CNY по кросс-курсу ЦБ РФ на дату платежа, не по курсу в шапке сайта.</p><p class="s">INSAL</p></div>
+      <div class="fact"><div class="big">15 раб. дней</div><p>Квартальный акт сверки приходит до 15-го числа после квартала; на возражения 15 рабочих дней, иначе принят автоматически. Три документа до 5-го числа: отчёт о реализации, акт выполненных работ, отчёт для валютных платежей.</p><p class="s">INSAL</p></div>
+      <div class="fact"><div class="big">120 дней</div><p>По FBP возвраты и нереализованные остатки лежат бесплатно до 120 дней, дальше 2,50 ₽ за литр в день. Обработка нестандартного товара (тяжелее 25 кг): 3 % от цены, не больше 280 ₽. Утилизация от 25 ₽/кг.</p><p class="s">GuruSeller, тарифы с 06.05.2026</p></div>
+      <div class="fact"><div class="big">26-е число</div><p>Банковские реквизиты меняются только с 26-го числа и до трёх дней до конца месяца, через поддержку и Excel-карточку. Название компании в банке и в кабинете должно совпадать буква в букву, иначе платёж не уйдёт.</p><p class="s">INSAL</p></div>
+      <div class="fact"><div class="big">WB China POP</div><p>Отдельный портал Wildberries для китайских поставщиков: комиссии 5–16 %, цены и расчёты в юанях без конвертации, еженедельные выплаты, логистика FBS со склада в материковом Китае или Гонконге, вход 10 000 ¥.</p><p class="s">Oborot.ru, 29.10.2025</p></div>
+    </div>
+    <p><small class="src">Источники: <a href="https://docs.ozon.ru/global/launch/steps/step-4/" target="_blank" rel="noopener">docs.ozon.ru/global</a> · <a href="https://guruseller.ru/kak-torgovat-na-ozon-iz-kitaya-komissii-logistika-i-model-fbp/" target="_blank" rel="noopener">GuruSeller</a> · <a href="https://insal.ru/blog/kak-prohodyat-vyplaty-ozon-global/" target="_blank" rel="noopener">INSAL</a> · <a href="https://oborot.ru/news/dorogo-no-priyatno-kakie-usloviya-wildberries-predlagaet-kitajskim-postavshhikam-i257038.html" target="_blank" rel="noopener">Oborot.ru</a>. Цифры в источниках местами расходятся, это отмечено в тексте.</small></p>
+  </div>
+</section>
+
+<section id="day">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Как это выглядит в работе</p>
+    <h2>2–3 часа в день на кабинеты, остальное делает скрипт до моего прихода</h2>
+    <div class="day">
+      <div class="tl">
+        <div class="h">Каждый день</div>
+        <div class="slot"><div class="d">08:30 МСК<br><span class="muted" style="font-weight:400">13:30 Гуанчжоу</span></div><div class="t"><b>Сводка по API уже в Telegram</b><p>Новые заказы и сколько часов до срока отгрузки, что заканчивается на складе, вчерашние начисления по типам. Скрипт ниже, запускается по расписанию.</p></div></div>
+        <div class="slot"><div class="d">30 мин</div><div class="t"><b>Заказы и отгрузки</b><p>Всё, что ждёт сборки, ушло фулфилменту; просрочек нет. Проблемные отправления: пишу партнёру, пока в Гуанчжоу рабочий день.</p></div></div>
+        <div class="slot"><div class="d">30 мин</div><div class="t"><b>Остатки и цены</b><p>Дней запаса по каждому SKU, заявка на пополнение. Цены: кто рядом в выдаче, блок «есть дешевле», пороги 1 500 и 5 000 ₽.</p></div></div>
+        <div class="slot"><div class="d">40 мин</div><div class="t"><b>Карточки, вопросы, поддержка</b><p>Ошибки модерации, вопросы покупателей, отзывы, обращения в поддержку площадок. Переписка с фулфилментом на английском, при необходимости через переводчик.</p></div></div>
+      </div>
+      <div class="tl">
+        <div class="h">По календарю</div>
+        <div class="slot"><div class="d">Пн</div><div class="t"><b>Сверка выплаты</b><p>Инструмент 2 по прошлому периоду: что вошло, что перешло на следующий, остаток объяснён или ушёл тикетом.</p></div></div>
+        <div class="slot"><div class="d">Пт</div><div class="t"><b>Юнит-экономика по всем SKU</b><p>Таблица из инструмента 1 на живых данных: что снять, где поднять цену, что везти в FBP, а что оставить на realFBS.</p></div></div>
+        <div class="slot"><div class="d">до 5-го</div><div class="t"><b>Три документа</b><p>Отчёт о реализации, акт выполненных работ, отчёт для валютных платежей: скачаны, проверены, переданы бухгалтеру.</p></div></div>
+        <div class="slot"><div class="d">15-е после квартала</div><div class="t"><b>Акт сверки</b><p>Напоминание стоит заранее: 15 рабочих дней на возражения, потом акт принят автоматически.</p></div></div>
+      </div>
+    </div>
+    <p class="lede">Скрипт сводки написан по документации Ozon Seller API: список отправлений FBS/realFBS, остатки, транзакции за период. С настоящим ключом кабинета ещё не запускался (у меня его нет), поэтому в репозитории он работает на тестовых данных: <code>--sample</code>. В первый рабочий день подключаю к вашему кабинету и правлю под реальные ответы API.</p>
+    <pre>python tools/ozon_global_daily.py --sample tools/sample --out digest.md
+Сводка за 27.10.2026 · кабинет (sample)
+Ждут отгрузки: 3 отправления, ближайший срок через 6 ч (0123456-0051-1)
+Заканчиваются: 2 SKU, SP1409 хватит на 5 дн. при текущих продажах
+Начисления за вчера: продажи 18 заказов, комиссия −3 590 ₽, доставка −7 332 ₽, возвраты −1 889 ₽
+записано digest.md</pre>
+    <p>Код: <a href="https://github.com/dobrewoks1/dobrewoks1.github.io/blob/main/tools/ozon_global_daily.py" target="_blank" rel="noopener">tools/ozon_global_daily.py</a> · тестовые данные: <a href="https://github.com/dobrewoks1/dobrewoks1.github.io/tree/main/tools/sample" target="_blank" rel="noopener">tools/sample</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Честно про границы</p>
+    <h2>Что я умею, что делает Claude Code и чего у меня нет</h2>
+    <div class="cols">
+      <div class="col"><h3>Умею сам</h3><ul><li>Таблицы на формулах и сводных: учёт техники и ТО на 93 машины вёл в Excel, прежде чем написал под него программу.</li><li>Разбираю регламенты и документацию до цифр: эта страница собрана за час по документам площадок.</li><li>Пишу людям так, чтобы вопрос закрывался с первого письма: поддержке, партнёру, покупателю.</li><li>Автозапчасти знаю со стороны эксплуатации: каталоги, OEM-номера, применимость, регламенты ТО.</li></ul></div>
+      <div class="col"><h3>Делает Claude Code</h3><ul><li>Скрипты к API кабинета, сверки, проверки каталога по чек-листу: я ставлю задачу и читаю результат.</li><li>Черновики описаний карточек по шаблону, которые я потом правлю по каталогу.</li><li>Ищет ошибку в отчёте быстрее, чем я глазами по 400 строкам.</li></ul></div>
+      <div class="col"><h3>Чего нет</h3><ul><li>Опыта именно с китайскими кабинетами Ozon Global и WB China. Российские FBO/FBS тоже вёл не как продавец.</li><li>Китайского языка: с фулфилментом по-английски и через переводчик.</li><li>Готовых ответов про ограничения кросс-бордера по категориям: сверяю в кабинете, а не по памяти.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Чем подтверждаю</p>
+    <h2>Что уже сделано в связке с ИИ</h2>
+    <div class="proof">
+      <div class="card"><div class="big">93 машины</div><h3>TO-Uchet: учёт техники и ТО для дочерней компании РЖД</h3><p class="muted">Считает остаток до ТО, подсвечивает просрочку, заказ-наряды, импорт и экспорт Excel. Один exe, работает офлайн. Механики пользуются каждый день; процесс разбирал с механиком и начальником участка.</p><p class="stack">Python · SQLite · JS · 286 автотестов</p></div>
+      <div class="card"><div class="big">229 компаний</div><h3>Сбор и оценка ниши для холодного выхода</h3><p class="muted">Сборщик компаний через API 2ГИС, оценка по рубрике, персональное первое сообщение каждой. Таблица, по которой потом шла работа.</p><p class="stack">Node · SQLite · Python</p></div>
+      <div class="card"><div class="big">56 каналов</div><h3>База Telegram-каналов продавцов Ozon и WB</h3><p class="muted">Страница-ответ другому работодателю, собранная за одно утро: живые метрики с t.me, оценка, черновики сообщений. Код сборщика открыт.</p><p class="stack">Python · JS · <a href="../sellehome/" target="_blank" rel="noopener">посмотреть</a></p></div>
+      <div class="card"><div class="big">с 2023</div><h3>Боты, реклама в Telegram, своя CRM</h3><p class="muted">Telegram-боты для заказчиков, настройка рекламы и обучение этому других, CRM на Python и веб для своих продаж. Деплой на VPS.</p><p class="stack">Python · aiogram · Linux · Docker</p></div>
+    </div>
+    <p>Код: <a href="https://github.com/dobrewoks1" target="_blank" rel="noopener">github.com/dobrewoks1</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Предложение</p>
+    <h2>Разбор реального кейса: готов до собеседования, а не на нём</h2>
+    <p class="lede">Пришлите один артикул, ваши тарифы по категории и один отчёт за период. За сутки верну карточку по чек-листу, юнит-экономику realFBS против FBP на ваших цифрах и сверку отчёта с выплатой. Если результат не понравится, вы потратили пять минут на письмо.</p>
+    <div class="steps">
+      <div class="step"><div class="d">Неделя 1</div><div class="t"><b>Кабинеты и цифры</b><p>Доступы, реальные тарифы по категории, таблица юнит-экономики по всему каталогу, календарь выплат и документов. Скрипт сводки подключён к кабинету.</p></div></div>
+      <div class="step"><div class="d">Недели 2–3</div><div class="t"><b>Карточки и цены</b><p>Каталог прогнан по чек-листу, ошибки исправлены, названия по шаблону, применимость и кросс-номера заполнены. Цены пересмотрены относительно порогов и конкурентов.</p></div></div>
+      <div class="step"><div class="d">Неделя 4</div><div class="t"><b>Первая сверка и отчёт</b><p>Выплата сверена до копейки, остатки и отгрузки без просрочек, отчёт одной страницей: маржинальность по SKU, что снять, что добавить, что везти в FBP.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Контакт</p>
+    <h2>Фёдор Поплавский, Омск, на связи весь день по МСК</h2>
+    <div class="contact">
+      <code id="tg">@Feodor_Russkiy</code>
+      <button id="copyTg">Скопировать Telegram</button>
+      <a href="https://t.me/Feodor_Russkiy" target="_blank" rel="noopener">Открыть в Telegram</a>
+      <span class="muted" id="copied" hidden>Скопировано</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function n(id){var v=parseFloat($(id).value);return isFinite(v)?v:0;}
+  function rub(v){return (Math.round(v)).toLocaleString("ru-RU")+" ₽";}
+  function rub2(v){return v.toLocaleString("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2})+" ₽";}
+  function cny(v){return v.toLocaleString("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2})+" ¥";}
+  function pct(v){return (Math.round(v*10)/10).toLocaleString("ru-RU")+" %";}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+  /* ---------- 1. unit economics ---------- */
+  var scheme="rfbs";
+  function params(){
+    return {t:[n("uT1"),n("uT2"),n("uT3")],fbpD:n("uFbpD"),rate:n("uRate")||1,ship:n("uShip"),fee:n("uFee"),pay:n("uPay"),ret:n("uRet"),retCost:n("uRetCost"),ads:n("uAds")};
+  }
+  function tier(price,p,sch){var r=price<=1500?p.t[0]:price<=5000?p.t[1]:p.t[2];if(sch==="fbp")r=Math.max(0,r-p.fbpD);return r;}
+  function calc(item,price,p,sch){
+    var vol=item.L*item.W*item.H/5000, chg=Math.max(item.w,vol);
+    var commR=tier(price,p,sch), comm=price*commR/100;
+    var fee=price>0?clamp(price*p.fee/100,15,200):0;
+    var delivery=chg*p.ship;
+    var payFee=Math.max(0,price-comm-fee-delivery)*p.pay/100;
+    var returns=p.ret/100*(p.retCost+delivery);
+    var ads=price*p.ads/100;
+    var cost=(item.buy+item.pack)*p.rate;
+    var margin=price-comm-fee-delivery-payFee-returns-ads-cost;
+    return {price:price,commR:commR,comm:comm,fee:fee,delivery:delivery,payFee:payFee,returns:returns,ads:ads,cost:cost,margin:margin,pct:price?margin/price*100:0,chg:chg,vol:vol};
+  }
+  function solve(item,p,sch,target){ /* price where margin/price == target (target 0 → breakeven) */
+    var lo=1,hi=200000;
+    for(var i=0;i<60;i++){var mid=(lo+hi)/2;var c=calc(item,mid,p,sch);if(c.margin-target*mid>=0)hi=mid;else lo=mid;}
+    return hi;
+  }
+  function itemFromForm(){return {name:$("uName").value,buy:n("uBuy"),pack:n("uPack"),w:n("uW"),L:n("uL"),W:n("uWd"),H:n("uH")};}
+  var SEG=[["cost","Закупка и упаковка","--c5"],["comm","Комиссия Ozon","--c2"],["fee","Сбор за отправление","--c3"],["delivery","Доставка покупателю","--c4"],["payFee","Провайдер выплат","--c7"],["returns","Резерв на невыкупы","--c6"],["ads","Реклама","--c3"]];
+  function renderUnit(){
+    var p=params(),item=itemFromForm(),price=n("uPrice"),c=calc(item,price,p,scheme);
+    $("kMargin").textContent=rub(c.margin);$("kMargin").className="v num"+(c.margin<0?" neg":"");
+    $("kMarginCny").textContent=cny(c.margin/p.rate);
+    $("kPct").textContent=pct(c.pct);$("kPct").className="v num"+(c.margin<0?" neg":"");
+    $("kBreak").textContent=rub(solve(item,p,scheme,0));
+    $("kTarget").textContent=rub(solve(item,p,scheme,0.2));
+    $("kComm").textContent=pct(c.commR);
+    $("kCommK").textContent="комиссия "+(scheme==="fbp"?"FBP":"realFBS")+", порог "+(price<=1500?"до 1 500 ₽":price<=5000?"до 5 000 ₽":"свыше 5 000 ₽");
+    var bar=$("wfbar"),lg=$("legend");bar.innerHTML="";lg.innerHTML="";
+    var total=price||1;
+    SEG.forEach(function(s){var v=c[s[0]];var i=document.createElement("i");i.style.width=clamp(v/total*100,0,100)+"%";i.style.background="var("+s[2]+")";i.title=s[1]+": "+rub(v);bar.appendChild(i);
+      var d=document.createElement("div");d.innerHTML='<span><span class="sw" style="background:var('+s[2]+')"></span>'+s[1]+(s[0]==="comm"?" ("+pct(c.commR)+")":s[0]==="delivery"?" ("+(Math.round(c.chg*100)/100).toLocaleString("ru-RU")+" кг)":"")+'</span><b class="num">'+rub(v)+'</b>';lg.appendChild(d);});
+    var m=document.createElement("i");m.className=c.margin>=0?"m":"neg";m.style.width=clamp(Math.abs(c.margin)/total*100,0,100)+"%";m.title="Маржа: "+rub(c.margin);bar.appendChild(m);
+    var dm=document.createElement("div");dm.innerHTML='<span><span class="sw" style="background:var('+(c.margin>=0?"--good":"--bad")+')"></span>Маржа</span><b class="num">'+rub(c.margin)+" · "+pct(c.pct)+'</b>';lg.appendChild(dm);
+    var hints=[];
+    var other=scheme==="fbp"?"rfbs":"fbp",co=calc(item,price,p,other);
+    var dlt=co.margin-c.margin;
+    hints.push({cls:dlt>0?"warn":"good",t:(dlt>0?"По "+(other==="fbp"?"FBP":"realFBS")+" маржа была бы на "+rub(dlt)+" больше при тех же вводных (комиссия ниже на "+p.fbpD+" п.п.). Но FBP добавляет приёмку и хранение у партнёра: их тариф надо подставить в закупку и упаковку.":"Текущая схема выгоднее другой на "+rub(-dlt)+" с продажи при этих вводных.")});
+    [1500,5000].forEach(function(th){if(price>th&&price<=th*1.1){var cl=calc(item,th,p,scheme);if(cl.margin>c.margin)hints.push({cls:"warn",t:"Цена "+rub(price)+" попадает в порог «"+(th===1500?"до 5 000":"свыше 5 000")+" ₽». При "+rub(th)+" комиссия на ступень ниже и маржа "+rub(cl.margin)+" вместо "+rub(c.margin)+": продаёте дешевле, зарабатываете больше."});}});
+    if(c.vol>item.w)hints.push({cls:"warn",t:"Объёмный вес "+(Math.round(c.vol*100)/100).toLocaleString("ru-RU")+" кг больше физического "+item.w.toLocaleString("ru-RU")+" кг: доставка считается по объёму. Плотнее упаковка или другой размер коробки снижают доставку."});
+    if(c.margin<0)hints.push({cls:"bad",t:"Маржа отрицательная. Цена безубыточности "+rub(solve(item,p,scheme,0))+"; если рынок выше не даёт, SKU снимаю или ищу закупку дешевле."});
+    else if(c.pct<10)hints.push({cls:"warn",t:"Маржа меньше 10 %: один лишний невыкуп съедает прибыль двух продаж. Такие SKU держу только ради трафика на карточки с нормальной маржой."});
+    $("hints").innerHTML=hints.map(function(h){return '<div class="hint '+h.cls+'">'+h.t+'</div>';}).join("");
+    renderSku(p);
+  }
+  var SKUS=[
+    {name:"Тормозные колодки передние, комплект",buy:85,pack:6,w:0.9,L:22,W:16,H:8,price:2190},
+    {name:"Масляный фильтр",buy:18,pack:3,w:0.35,L:10,W:10,H:12,price:590},
+    {name:"Фильтр салона угольный",buy:22,pack:3,w:0.25,L:25,W:20,H:4,price:690},
+    {name:"Ступичный подшипник",buy:60,pack:5,w:1.1,L:12,W:12,H:8,price:1590},
+    {name:"Датчик ABS",buy:48,pack:3,w:0.15,L:15,W:8,H:5,price:1290},
+    {name:"Амортизатор задний",buy:140,pack:12,w:2.4,L:60,W:12,H:12,price:3490},
+    {name:"Стойка стабилизатора",buy:35,pack:4,w:0.5,L:30,W:6,H:6,price:990},
+    {name:"Комплект ГРМ с помпой",buy:210,pack:10,w:1.6,L:30,W:25,H:10,price:5490}
+  ];
+  function advice(c,item,p){
+    if(c.margin<0)return ["bad","снять или искать закупку дешевле"];
+    for(var i=0;i<2;i++){var th=[1500,5000][i];if(c.price>th&&c.price<=th*1.1){var cl=calc(item,th,p,scheme);if(cl.margin>c.margin)return ["warn","опустить до "+rub(th)+": +"+rub(cl.margin-c.margin)];}}
+    if(c.vol>item.w*1.3)return ["warn","переупаковать: объёмный вес"];
+    if(c.pct<10)return ["warn","низкая маржа, держать ради трафика"];
+    if(c.pct>=25)return ["good","везти в FBP, наращивать остаток"];
+    return ["good","оставить, следить за ценой"];
+  }
+  function renderSku(p){
+    var tb=$("skuTbl").tBodies[0];tb.innerHTML="";
+    var rows=SKUS.map(function(s){var c=calc(s,s.price,p,scheme);return {s:s,c:c,a:advice(c,s,p)};}).sort(function(a,b){return b.c.pct-a.c.pct;});
+    rows.forEach(function(r){var tr=document.createElement("tr");tr.className="click";tr.tabIndex=0;
+      var w=clamp(Math.abs(r.c.pct)/40*100,0,100);
+      tr.innerHTML='<td style="white-space:normal;min-width:200px;font-weight:500">'+r.s.name+'</td><td class="r num">'+r.s.buy+'</td><td class="r num">'+r.s.w.toLocaleString("ru-RU")+(r.c.vol>r.s.w?' <span class="pill warn" title="объёмный вес больше">об. '+(Math.round(r.c.vol*100)/100).toLocaleString("ru-RU")+'</span>':'')+'</td><td class="r num">'+r.s.price.toLocaleString("ru-RU")+'</td><td class="r num">'+pct(r.c.commR)+'</td><td class="r num" style="color:var('+(r.c.margin<0?"--bad":"--ink")+')">'+rub(r.c.margin)+'</td><td><span class="bar"><i class="'+(r.c.margin<0?"neg":"")+'" style="width:'+w+'%"></i></span><span class="num">'+pct(r.c.pct)+'</span></td><td><span class="pill '+r.a[0]+'">'+r.a[1]+'</span></td>';
+      function pick(){$("uName").value=r.s.name;$("uBuy").value=r.s.buy;$("uPack").value=r.s.pack;$("uW").value=r.s.w;$("uL").value=r.s.L;$("uWd").value=r.s.W;$("uH").value=r.s.H;$("uPrice").value=r.s.price;renderUnit();document.getElementById("unit").scrollIntoView({behavior:"smooth",block:"start"});}
+      tr.addEventListener("click",pick);tr.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}});
+      tb.appendChild(tr);});
+  }
+  ["uName","uBuy","uPack","uW","uL","uWd","uH","uPrice","uT1","uT2","uT3","uFbpD","uRate","uShip","uFee","uPay","uRet","uRetCost","uAds"].forEach(function(id){$(id).addEventListener("input",renderUnit);});
+  $("sRfbs").addEventListener("click",function(){scheme="rfbs";$("sRfbs").classList.add("on");$("sFbp").classList.remove("on");renderUnit();});
+  $("sFbp").addEventListener("click",function(){scheme="fbp";$("sFbp").classList.add("on");$("sRfbs").classList.remove("on");renderUnit();});
+  renderUnit();
+
+  /* ---------- 2. reconciliation ---------- */
+  function seeded(s){return function(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;};}
+  var ST={d:"Доставлен",t:"В пути",c:"Отменён",r:"Возврат после доставки"};
+  function sampleReport(){
+    /* кросс-бордер: заказ сделан в сентябре-октябре, доставка через 10–25 дней; период выплаты считается по дате «Доставлен» */
+    var r=seeded(20261027),rows=[],names=["SP1409","OF-1032","CF-220","HB-5522","ABS-77","SA-2211","SL-308","TK-900"],prices=[2190,590,690,1790,1290,3990,990,5490],wts=[0.9,0.35,0.4,1.1,0.15,2.4,0.5,1.6];
+    for(var i=0;i<26;i++){
+      var k=Math.floor(r()*8),od=new Date(2026,8,22+Math.floor(r()*28));
+      var st=i===3||i===17?"r":i===9||i===21?"t":i===12?"c":"d";
+      var dd=(st==="d"||st==="r")?new Date(od.getTime()+(10+Math.floor(r()*16))*864e5):null;
+      var price=prices[k],comm=Math.round(price*(price<=1500?11:price<=5000?12:13))/100,fee=clamp(price*0.02,15,200),del=Math.round(wts[k]*380);
+      rows.push({posting:"0123456-00"+(40+i)+"-1",order:"1234"+(40+i)+"-00"+(1+i%3),sku:names[k],status:st,ordered:od,delivered:dd,price:price,comm:comm,fee:fee,delivery:del});
+    }
+    return rows;
+  }
+  var R=sampleReport(),fromCsv=false;
+  function fmtD(d){return d?d.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"}):"—";}
+  function parseDate(s){var m=String(s).match(/(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);m=String(s).match(/(\d{2})\.(\d{2})\.(\d{4})/);if(m)return new Date(+m[3],+m[2]-1,+m[1]);return null;}
+  function renderRecon(){
+    var from=parseDate($("rFrom").value)||new Date(2026,9,16),to=parseDate($("rTo").value)||new Date(2026,9,31);to=new Date(to.getTime()+864e5-1);
+    var rate=n("rRate")||1,payP=n("rPay");
+    var tb=$("rTbl").tBodies[0];tb.innerHTML="";
+    var naive=0,inPay=0,fees=0,notDel=0,notDelN=0,nextP=0,nextN=0,ret=0,retN=0,canc=0,cancN=0,out=0,outN=0;
+    R.forEach(function(x){
+      var net=x.price-x.comm-x.fee-x.delivery;naive+=x.price;
+      var why,cls;
+      if(x.status==="c"){why="отменён, в выплату не идёт";cls="bad";cancN++;canc+=x.price;}
+      else if(!x.delivered){why="нет статуса «Доставлен», ждёт следующую выплату";cls="warn";notDelN++;notDel+=x.price;}
+      else if(x.delivered>to){why="доставлен "+fmtD(x.delivered)+", после закрытия периода";cls="warn";nextN++;nextP+=x.price;}
+      else if(x.delivered<from){why="доставлен "+fmtD(x.delivered)+", до периода: был в прошлой выплате";cls="warn";outN++;out+=x.price;}
+      else if(x.status==="r"){why="возврат после доставки: начислено и удержано";cls="bad";retN++;ret+=x.price;}
+      else {why="в выплату";cls="good";inPay+=net;fees+=x.comm+x.fee+x.delivery;}
+      var tr=document.createElement("tr");
+      tr.innerHTML='<td class="num" style="font-family:var(--mono);font-size:12.5px">'+x.posting+'</td><td class="num" style="font-size:12.5px">'+fmtD(x.ordered)+' · '+x.sku+'</td><td>'+ST[x.status]+(x.delivered?' <span class="muted" style="font-size:12px">'+fmtD(x.delivered)+'</span>':'')+'</td><td class="r num">'+x.price.toLocaleString("ru-RU")+'</td><td class="r num">−'+x.comm.toLocaleString("ru-RU")+'</td><td class="r num">−'+x.fee.toLocaleString("ru-RU")+'</td><td class="r num">−'+x.delivery.toLocaleString("ru-RU")+'</td><td class="r num">'+net.toLocaleString("ru-RU")+'</td><td><span class="pill '+cls+'">'+why+'</span></td>';
+      tb.appendChild(tr);
+    });
+    var gross=inPay,feeP=gross*payP/100,expRub=gross-feeP,expCny=expRub/rate;
+    if(!$("rGot").dataset.touched){$("rGot").value=fromCsv?"":(Math.round((expCny-19.75)*100)/100);}
+    var got=parseFloat($("rGot").value);var hasGot=isFinite(got);
+    var rest=hasGot?got-expCny:0;
+    var d=$("diff");
+    d.innerHTML=[
+      ['Сумма всех заказов отчёта (так считать нельзя)','<span class="mono">'+rub2(naive)+'</span>'],
+      ['Ещё не «Доставлен»: '+notDelN+' шт.','<span class="mono no">−'+rub2(notDel)+'</span>'],
+      ['Доставлены после периода: '+nextN+' шт.','<span class="mono no">−'+rub2(nextP)+'</span>'],
+      ['Доставлены до периода: '+outN+' шт.','<span class="mono no">−'+rub2(out)+'</span>'],
+      ['Возвраты после доставки: '+retN+' шт.','<span class="mono no">−'+rub2(ret)+'</span>'],
+      ['Отменённые: '+cancN+' шт.','<span class="mono no">−'+rub2(canc)+'</span>'],
+      ['Комиссия, сбор, доставка по вошедшим','<span class="mono no">−'+rub2(fees)+'</span>'],
+      ['Ожидаю к выплате, ₽','<span class="mono">'+rub2(gross)+'</span>'],
+      ['Провайдер '+payP.toLocaleString("ru-RU")+' %','<span class="mono no">−'+rub2(feeP)+'</span>'],
+      ['Ожидаю, ¥ по курсу '+rate.toLocaleString("ru-RU")+' на дату выплаты','<span class="mono ok">'+cny(expCny)+'</span>'],
+      ['Пришло, ¥','<span class="mono">'+(hasGot?cny(got):"—")+'</span>'],
+      ['Разница','<span class="mono '+(Math.abs(rest)<1?"ok":"no")+'">'+(hasGot?cny(rest):"—")+'</span>']
+    ].map(function(p,i,a){return '<div'+(i===a.length-1||i===9?' class="total"':'')+'><span>'+p[0]+'</span>'+p[1]+'</div>';}).join("");
+    var v=$("rVerdict");
+    if(!hasGot){v.className="hint";v.textContent="Введите сумму, которая пришла на счёт: покажу, объясняется ли разница.";}
+    else if(Math.abs(rest)<1){v.className="hint good";v.textContent="Сходится: выплата объяснена до юаня. Заказы, которые не вошли, жду в следующей выплате и проверю там.";}
+    else if(Math.abs(rest)<=Math.max(2,expCny*0.004)){v.className="hint warn";v.textContent="Разница "+cny(rest)+" похожа на курсовую: пересчитываю по кросс-курсу ЦБ на фактическую дату платежа, а не на плановую.";}
+    else {v.className="hint bad";v.textContent="Разница "+cny(rest)+" не объясняется статусами. Проверяю акт выполненных работ за период (обработка нестандартного товара 3 %, обратная логистика, хранение сверх 120 дней). Если и там нет, уходит тикет, черновик ниже.";}
+    $("ticket").textContent="Здравствуйте. Кабинет: <ID>. Выплата за период "+fmtD(from)+"–"+fmtD(to)+".\nПо отчёту о реализации ожидали "+rub2(gross)+" ("+cny(expCny)+" по курсу "+rate+" за вычетом комиссии провайдера "+payP+" %). Получено "+(hasGot?cny(got):"<сумма>")+". Разница "+(hasGot?cny(rest):"<сумма>")+".\nУчтены: ещё не доставленные ("+notDelN+"), доставленные после периода ("+nextN+"), доставленные до периода ("+outN+"), возвраты ("+retN+"), отмены ("+cancN+").\nПрошу расшифровку удержаний по этой выплате с номерами отправлений и видами услуг. Список отправлений, вошедших в наш расчёт, прилагаю файлом.";
+  }
+  ["rFrom","rTo","rRate","rPay"].forEach(function(id){$(id).addEventListener("input",renderRecon);});
+  $("rGot").addEventListener("input",function(){$("rGot").dataset.touched="1";renderRecon();});
+  $("rDemo").addEventListener("click",function(){R=sampleReport();fromCsv=false;delete $("rGot").dataset.touched;$("rFrom").value="2026-10-16";$("rTo").value="2026-10-31";$("rFileNote").textContent="Образец возвращён.";renderRecon();});
+  function parseCsv(text){
+    var sep=(text.split("\n")[0].match(/;/g)||[]).length>=(text.split("\n")[0].match(/,/g)||[]).length?";":",";
+    var rows=[],row=[],cell="",q=false;
+    for(var i=0;i<text.length;i++){var ch=text[i];
+      if(q){if(ch==='"'){if(text[i+1]==='"'){cell+='"';i++;}else q=false;}else cell+=ch;}
+      else if(ch==='"')q=true;else if(ch===sep){row.push(cell);cell="";}
+      else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&text[i+1]==="\n")i++;row.push(cell);rows.push(row);row=[];cell="";}
+      else cell+=ch;}
+    if(cell.length||row.length){row.push(cell);rows.push(row);}
+    return rows.filter(function(r){return r.some(function(c){return c.trim();});});
+  }
+  function findCol(h,re){for(var i=0;i<h.length;i++)if(re.test(h[i]))return i;return -1;}
+  function num(s){var v=parseFloat(String(s).replace(/\s/g,"").replace(",","."));return isFinite(v)?v:0;}
+  $("rFile").addEventListener("change",function(e){
+    var f=e.target.files[0];if(!f)return;
+    var rd=new FileReader();rd.onload=function(){
+      var rows=parseCsv(rd.result);if(rows.length<2){$("rFileNote").textContent="В файле нет строк данных.";return;}
+      var h=rows[0].map(function(x){return x.toLowerCase().trim();});
+      var ci={post:findCol(h,/отправлен|posting|shipment/),order:findCol(h,/заказ|order/),st:findCol(h,/статус|status/),d1:findCol(h,/дата (заказа|создан)|создан|order.?date|created|^дата$/),d2:findCol(h,/достав|delivered/),price:findCol(h,/цена|сумма|price|amount/),comm:findCol(h,/комисс|commission/),fee:findCol(h,/сбор|fee/),del:findCol(h,/логист|delivery|shipping/),sku:findCol(h,/артикул|sku|offer/)};
+      if(ci.price<0){$("rFileNote").textContent="Не нашёл колонку с ценой (цена / сумма / price). Переименуйте заголовок и попробуйте снова.";return;}
+      var p=params();
+      R=rows.slice(1).map(function(r,i){
+        var price=num(r[ci.price]),stTxt=ci.st>=0?String(r[ci.st]).toLowerCase():"";
+        var st=/возвр|return/.test(stTxt)?"r":/отмен|cancel/.test(stTxt)?"c":/достав|deliver/.test(stTxt)?"d":"t";
+        var od=ci.d1>=0?parseDate(r[ci.d1]):null,dd=ci.d2>=0?parseDate(r[ci.d2]):(st==="d"||st==="r")&&od?od:null;
+        if(st==="d"&&!dd)dd=od;
+        return {posting:ci.post>=0?r[ci.post]:"строка "+(i+2),order:ci.order>=0?r[ci.order]:"",sku:ci.sku>=0?r[ci.sku]:"",status:st,ordered:od||new Date(1970,0,1),delivered:dd,price:price,comm:ci.comm>=0?Math.abs(num(r[ci.comm])):Math.round(price*tier(price,p,scheme))/100,fee:ci.fee>=0?Math.abs(num(r[ci.fee])):clamp(price*p.fee/100,15,200),delivery:ci.del>=0?Math.abs(num(r[ci.del])):0};
+      });
+      fromCsv=true;delete $("rGot").dataset.touched;
+      var missing=[];if(ci.st<0)missing.push("статус");if(ci.comm<0)missing.push("комиссия (посчитана по порогам калькулятора)");if(ci.del<0)missing.push("логистика (принята 0)");if(ci.d1<0)missing.push("дата заказа");
+      $("rFileNote").textContent="Загружено "+R.length+" строк."+(missing.length?" Не нашёл: "+missing.join(", ")+".":" Все колонки найдены.");
+      renderRecon();
+    };rd.readAsText(f,"utf-8");
+  });
+  renderRecon();
+
+  /* ---------- 3. card checker ---------- */
+  var GOOD={cType:"Колодки тормозные передние",cBrand:"Sangsin",cSku:"SP1409",cOem:"58101-2SA20, 58101-2SA00",cFit:"Hyundai ix35 (LM) 2010–2015, Kia Sportage (SL) 2010–2016",cWg:900,cPhotos:5,cPrice:1890,cDesc:$("cDesc").value};
+  var BAD={cType:"Колодки",cBrand:"OEM",cSku:"SP 1409",cOem:"",cFit:"Хендай, Киа",cWg:0,cPhotos:1,cPrice:1520,cDesc:"Оригинальные колодки OEM качество, подходят на все модели. Тормозная жидкость в подарок."};
+  function checkCard(){
+    var v={};["cType","cBrand","cSku","cOem","cFit","cDesc"].forEach(function(k){v[k]=$(k).value.trim();});["cWg","cPhotos","cPrice"].forEach(function(k){v[k]=n(k);});
+    var L=[],score=100;
+    function add(cls,t,pen){L.push({cls:cls,t:t});score-=pen||0;}
+    var oems=v.cOem.split(/[,;]+/).map(function(s){return s.trim();}).filter(Boolean);
+    if(!v.cType)add("bad","Нет типа детали: в названии первым идёт «что это».",15);else add("ok","Тип детали: "+v.cType);
+    if(!v.cBrand||/^oem$|^no ?name$|^без бренда$/i.test(v.cBrand))add("bad","Бренд пустой или «OEM»: модерация вернёт, покупатель не найдёт.",15);else add("ok","Бренд: "+v.cBrand);
+    if(!v.cSku)add("bad","Нет артикула производителя.",15);
+    else if(/\s/.test(v.cSku))add("bad","В артикуле пробел: «"+v.cSku+"». По такому номеру не найдут. Ожидаю «"+v.cSku.replace(/\s+/g,"")+"».",10);
+    else if(/[А-Яа-яЁё]/.test(v.cSku))add("bad","В артикуле кириллица: латинская C и русская С выглядят одинаково, поиск их различает.",10);
+    else add("ok","Артикул: "+v.cSku);
+    if(!oems.length)add("bad","Нет OEM и кросс-номеров: по ним ищут 70 % покупателей запчастей. Минимум один OEM-номер автопроизводителя.",15);
+    else{var badOem=oems.filter(function(o){return !/^[A-Za-z0-9][A-Za-z0-9\-\.\/ ]{3,}$/.test(o);});if(badOem.length)add("warn","Подозрительные номера: "+badOem.join(", "),5);else add("ok","Кросс-номера: "+oems.length+" шт.");}
+    if(!v.cFit)add("bad","Нет применимости.",15);
+    else if(!/\d{4}/.test(v.cFit))add("bad","В применимости нет годов выпуска: «"+v.cFit+"». Нужно марка, модель, кузов, годы.",10);
+    else if(/^[А-Яа-яЁё ,]+$/.test(v.cFit))add("warn","Марки по-русски без латинского написания: добавить «Hyundai», «Kia», так ищут чаще.",5);
+    else add("ok","Применимость с годами.");
+    if(!v.cWg)add("bad","Нет веса: без него не посчитать доставку и объёмный вес, а перевозчик пересчитает по факту.",10);else add("ok","Вес "+v.cWg+" г.");
+    if(v.cPhotos<3)add("warn","Фото: "+v.cPhotos+". Нужны минимум 3: деталь, маркировка с номером, комплект.",8);else add("ok","Фото: "+v.cPhotos);
+    if(v.cDesc.length<300)add("warn","Описание "+v.cDesc.length+" знаков, хочу от 300: что в комплекте, применимость словами, как сверить по VIN.",8);else add("ok","Описание "+v.cDesc.length+" знаков.");
+    var all=(v.cDesc+" "+v.cType+" "+v.cBrand).toLowerCase();
+    if(/оригинал|oem.?качеств|original/.test(all)&&!/неоригинал/.test(all))add("bad","В тексте «оригинал» / «OEM-качество»: у неоригинальной детали это претензия правообладателя и блок карточки. Пишу «аналог», «совместимо с».",10);
+    if(/все модели|универсальн/.test(all))add("warn","«Подходит на все модели»: главный источник возвратов. Перечисляю конкретные модели и годы.",5);
+    if(/жидкост|масло|аккумулятор|аэрозол|антифриз|спрей/.test(all))add("warn","Жидкости, масла, аккумуляторы, аэрозоли: опасный груз для авиа и почты, по кросс-бордеру могут быть запрещены. Уточняю у партнёра до загрузки.",0);
+    if(/шин|покрышк/.test(all))add("warn","Шины: обязательная маркировка «Честный знак». Проверяю требования к ввозу до загрузки.",0);
+    if(v.cPrice>1500&&v.cPrice<=1650)add("warn","Цена "+v.cPrice+" ₽ чуть выше порога 1 500 ₽: комиссия на ступень выше. Считаю в калькуляторе, не выгоднее ли 1 499 ₽.",0);
+    if(v.cPrice>5000&&v.cPrice<=5500)add("warn","Цена "+v.cPrice+" ₽ чуть выше порога 5 000 ₽: проверяю ступень комиссии.",0);
+    score=clamp(score,0,100);
+    $("cScore").textContent=score;$("cScore").style.color=score>=80?"var(--good)":score>=50?"var(--cny)":"var(--bad)";
+    var title=[v.cType,v.cBrand,v.cSku.replace(/\s+/g,""),v.cFit?"для "+v.cFit.split(",")[0].trim():""].filter(Boolean).join(" ");
+    $("cTitle").textContent=title||"—";
+    $("cMeta").textContent="поиск по номерам: "+[v.cSku.replace(/\s+/g,"")].concat(oems).filter(Boolean).join(" · ")+(v.cFit?" · применимость: "+v.cFit:"");
+    $("cList").innerHTML=L.map(function(x){return '<li class="'+x.cls+'"><span class="i">'+(x.cls==="ok"?"✓":x.cls==="warn"?"!":"✕")+'</span><span>'+x.t+'</span></li>';}).join("");
+  }
+  function fill(o){Object.keys(o).forEach(function(k){$(k).value=o[k];});checkCard();}
+  $("cCheck").addEventListener("click",checkCard);
+  $("cBad").addEventListener("click",function(){var isBad=$("cSku").value==="SP 1409";$("cBad").textContent=isBad?"Подставить плохой пример":"Вернуть хороший пример";fill(isBad?GOOD:BAD);});
+  ["cType","cBrand","cSku","cOem","cFit","cWg","cPhotos","cPrice","cDesc"].forEach(function(id){$(id).addEventListener("input",checkCard);});
+  checkCard();
+
+  /* ---------- misc ---------- */
+  $("copyTg").addEventListener("click",function(){navigator.clipboard&&navigator.clipboard.writeText("@Feodor_Russkiy").then(function(){$("copied").hidden=false;setTimeout(function(){$("copied").hidden=true;},1500);});});
+  var els=document.querySelectorAll("[data-reveal]");
+  if("IntersectionObserver" in window&&window.matchMedia("(prefers-reduced-motion: no-preference)").matches){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{rootMargin:"0px 0px -8% 0px"});
+    els.forEach(function(el){io.observe(el);});
+  }else{els.forEach(function(el){el.classList.add("in");});}
+})();
+</script>
+</body>
+</html>
