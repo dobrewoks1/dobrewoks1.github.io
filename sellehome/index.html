@@ -160,7 +160,7 @@ pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background
   <p class="eyebrow">Ответ Илье · вакансия «Менеджер по работе с блогерами» · SelleHome · 27.10.2026</p>
   <h1>Владею ли Клодом? Да, каждый день. Вайбкодинг? Нет.</h1>
   <p class="quote">Ваш вопрос: <b>«…владеете Клодом? Вайбкодите? Или есть опыт именно в программировании, знании архитектуры?»</b></p>
-  <p class="lede">Илья, вместо длинного сообщения показываю на деле. Ниже база из <span id="hCount">50+</span> реальных Telegram-каналов и чатов, где сидят продавцы Ozon и Wildberries: живые цифры с t.me, оценка каждого, контакт для рекламы и черновик первого сообщения с зацепкой из последнего поста. Собрано за вечер скриптом, который я написал с Claude Code. Код сборщика открыт.</p>
+  <p class="lede">Илья, вместо длинного сообщения показываю на деле. Ниже база из <span id="hCount">50+</span> реальных Telegram-каналов и чатов, где сидят продавцы Ozon и Wildberries: живые цифры с t.me, оценка каждого, контакт для рекламы и черновик первого сообщения с зацепкой из последнего поста. Собрано сегодня утром скриптом, который я написал с Claude Code. Код сборщика открыт.</p>
   <div class="chips">
     <span class="chip">Python</span><span class="chip">Node</span><span class="chip">SQLite</span><span class="chip">Telegram-боты</span><span class="chip">VPS · Docker</span><span class="chip">Claude Code · Codex</span><span class="chip">Google Sheets · CRM</span>
   </div>
@@ -211,12 +211,12 @@ pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background
 <section>
   <div class="wrap">
     <p class="eyebrow">Как это собрано</p>
-    <h2>Один вечер, 60 строк Python, никаких API-ключей</h2>
+    <h2>Одно утро, 130 строк Python, никаких API-ключей</h2>
     <div class="how">
       <div><b>1. Источники</b><p>Пять публичных подборок (se11er.ru, telegid, partnerkin, tele-finder, sellermap) → 56 адресов. Каналы про находки, скидки и ПВЗ отсеял вручную: там покупатели, а не продавцы.</p></div>
       <div><b>2. Сбор</b><p>На каждый адрес две публичные страницы t.me: карточка (точное число подписчиков, описание) и лента (последние 20 постов с датами и просмотрами). 1 запрос в секунду, браузерный User-Agent, стоп после трёх ошибок.</p></div>
       <div><b>3. Метрики</b><p>Средние просмотры поста, охват в % от подписчиков, постов в неделю, дата последнего поста, контакт для рекламы из описания. Всё считается из сырых данных, ничего не вписано руками.</p></div>
-      <div><b>4. Дальше</b><p>Те же 60 строк переносятся на менеджеров магазинов и агентства: чаты селлеров, 2ГИС, Яндекс. Я так уже собрал 229 компаний одной ниши и каждой написал своё сообщение.</p></div>
+      <div><b>4. Дальше</b><p>Тот же скрипт переносится на менеджеров магазинов и агентства: чаты селлеров, 2ГИС, Яндекс. Я так уже собрал 229 компаний одной ниши и каждой написал своё сообщение.</p></div>
     </div>
     <pre>python tools/collect_tg.py tools/channels.txt sellehome/channels.json
 [1/56] namarketplacewithleo: channel 87604 avg_views=4969
@@ -455,8 +455,8 @@ pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;background
     D=(data.items||[]).filter(function(x){return !x.error&&x.count;});
     D.forEach(function(x){x.contact=adContact(x.description);x.st=0;x.s=score(x);});
     var at=data.collected_at?new Date(data.collected_at):null;
-    if(at)document.getElementById("collectedAt").textContent="собрано "+at.toLocaleDateString("ru-RU")+" в "+at.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})+" МСК";
-    sel=D.slice().sort(function(a,b){return b.s.total-a.s.total;})[0].username;
+    if(at)document.getElementById("collectedAt").textContent="собрано "+at.toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow"})+" в "+at.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"})+" МСК";
+    sel=D.filter(function(x){return x.kind==="channel"&&!x.dead;}).sort(function(a,b){return b.s.total-a.s.total;})[0].username;
     renderAll();
   }
   if(window.CHANNELS)load(window.CHANNELS);
