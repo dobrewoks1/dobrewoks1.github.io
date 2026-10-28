@@ -1,0 +1,210 @@
+{
+ "items": [
+  {
+   "offer_id": "ART-001",
+   "product_id": 900000,
+   "sku": 1400000000,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 288,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-002",
+   "product_id": 900001,
+   "sku": 1400000001,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 355,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-003",
+   "product_id": 900002,
+   "sku": 1400000002,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 251,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-004",
+   "product_id": 900003,
+   "sku": 1400000003,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 46,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-005",
+   "product_id": 900004,
+   "sku": 1400000004,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 28,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-006",
+   "product_id": 900005,
+   "sku": 1400000005,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 300,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-007",
+   "product_id": 900006,
+   "sku": 1400000006,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 733,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-008",
+   "product_id": 900007,
+   "sku": 1400000007,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 116,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-009",
+   "product_id": 900008,
+   "sku": 1400000008,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 334,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-010",
+   "product_id": 900009,
+   "sku": 1400000009,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 0,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-011",
+   "product_id": 900010,
+   "sku": 1400000010,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 1371,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  },
+  {
+   "offer_id": "ART-012",
+   "product_id": 900011,
+   "sku": 1400000011,
+   "stocks": [
+    {
+     "type": "fbo",
+     "present": 57,
+     "reserved": 0
+    },
+    {
+     "type": "fbs",
+     "present": 0,
+     "reserved": 0
+    }
+   ]
+  }
+ ],
+ "cursor": "",
+ "total": 12
+}

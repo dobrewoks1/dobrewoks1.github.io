@@ -1,0 +1,162 @@
+{
+ "items": [
+  {
+   "offer_id": "ART-001",
+   "product_id": 900000,
+   "sku": 1400000000,
+   "price": {
+    "price": "3490",
+    "old_price": "4362",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "AVG_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-002",
+   "product_id": 900001,
+   "sku": 1400000001,
+   "price": {
+    "price": "2790",
+    "old_price": "3488",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-003",
+   "product_id": 900002,
+   "sku": 1400000002,
+   "price": {
+    "price": "2390",
+    "old_price": "2988",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "NON_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-004",
+   "product_id": 900003,
+   "sku": 1400000003,
+   "price": {
+    "price": "2190",
+    "old_price": "2738",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "AVG_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-005",
+   "product_id": 900004,
+   "sku": 1400000004,
+   "price": {
+    "price": "1590",
+    "old_price": "1988",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-006",
+   "product_id": 900005,
+   "sku": 1400000005,
+   "price": {
+    "price": "2990",
+    "old_price": "3738",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "AVG_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-007",
+   "product_id": 900006,
+   "sku": 1400000006,
+   "price": {
+    "price": "1890",
+    "old_price": "2362",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-008",
+   "product_id": 900007,
+   "sku": 1400000007,
+   "price": {
+    "price": "4990",
+    "old_price": "6238",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "AVG_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-009",
+   "product_id": 900008,
+   "sku": 1400000008,
+   "price": {
+    "price": "1290",
+    "old_price": "1612",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-010",
+   "product_id": 900009,
+   "sku": 1400000009,
+   "price": {
+    "price": "1990",
+    "old_price": "2488",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "AVG_PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-011",
+   "product_id": 900010,
+   "sku": 1400000010,
+   "price": {
+    "price": "990",
+    "old_price": "1238",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "PROFIT"
+   }
+  },
+  {
+   "offer_id": "ART-012",
+   "product_id": 900011,
+   "sku": 1400000011,
+   "price": {
+    "price": "3790",
+    "old_price": "4738",
+    "currency_code": "RUB"
+   },
+   "price_indexes": {
+    "color_index": "NON_PROFIT"
+   }
+  }
+ ],
+ "cursor": "",
+ "total": 12
+}
